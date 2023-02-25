@@ -1,0 +1,63 @@
+body {
+    font-family: kanit;
+    /* font-family: Poppins,sans-serif; */
+}
+
+.btn-gradient{
+    background: linear-gradient(90deg,#9568ff,#9568ff 99.31%);
+    border: 0;
+    box-shadow: 0 4px 10px var(--rgba-primary-2);
+    padding: 18px 50px
+}
+
+.text-gradient{
+    color: #9467fe!important
+}
+
+.icon-box{
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 15px 40px rgb(1 18 111 / 15%);
+    /* height: 100%; */
+    width:330px;
+    overflow: hidden;
+    padding: 20px 25px;
+    position: relative;
+    transition: all .8s;
+    z-index: 2;
+}
+
+.icon-box:hover{
+    transform: translateY(-8px);
+    background-color:#edf5ff;
+}
+
+/* .icon-media{
+    align-items: center;
+    display: flex;
+    margin-bottom: 15px;
+    font-size: 15px;
+} */
+.icon-media img{
+    height: 50px;
+}
+
+#footer{
+    background: url(https://cryptozone.dexignzone.com/frontend/react/static/media/bg1.1cf2ddcfe051761290e7.jpg);
+    background-blend-mode:luminosity;
+    background-color: #221646 !important;
+    background-position: 50%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    /* padding: 100px 0 45px; */
+    position: relative;
+    z-index: 1;
+}
+#footer-content{
+    /* background-blend-mode: luminosity; */
+    background-color: #191035 !important;
+    opacity: 0.9;
+    color: white !important;
+    width: 100%;
+}
