@@ -17,7 +17,7 @@ export const App = () => {
       <HomeBanner/>
       <Dashboard/>
       {/* <CandlestickChart/> */}
-      <ReactGraph/>
+      {/* <ReactGraph/> */}
       <Footer/>
     </>
   );
