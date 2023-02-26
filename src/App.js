@@ -10,6 +10,7 @@ import {CandlestickChart}  from './components/CandlestickChart';
 import {ReactGraph} from './components/ReactGraph'
 import {Navbar} from './components/Navbar'
 import {WhyUs} from './components/WhyUs'
+import { OneStopSolution } from './components/OneStopSolution';
 
 export const App = () => {
   return (
@@ -17,6 +18,7 @@ export const App = () => {
       <Navbar/>
       <HomeBanner/>
       <WhyUs/>
+      <OneStopSolution/>
       {/* <Dashboard/> */}
       {/* <CandlestickChart/> */}
       {/* <ReactGraph/> */}

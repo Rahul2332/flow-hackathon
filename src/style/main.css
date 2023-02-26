@@ -150,3 +150,49 @@ body {
     padding: 32px 30px;
     transition: all .8s;
 }
+
+.icon-bx-wraper.style-3 {
+    background: #fff;
+    background-blend-mode: color;
+    border-radius: 20px;
+    box-shadow: 0 25px 40px rgb(28 46 158 / 10%);
+    flex-direction: column;
+    height: 100%;
+    margin-top: 10px;
+    padding: 25px 45px 40px;
+    position: relative;
+    row-gap: 0;
+    transition: all .8s;
+    transition: .5s;
+}
+
+.icon-bx-wraper.style-3 .icon-media {
+    align-items: center;
+    background-position: 50%;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background: #9467fe;
+    border-radius: 0.6rem 2rem 0.6rem 4rem;
+    box-shadow: 0 30px 45px rgb(148 103 254 / 30%);
+    display: flex;
+    height: 142px;
+    justify-content: center;
+    margin: -35px auto 25px;
+    object-fit: cover;
+    position: relative;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    transition: .5s;
+    width: 142px;
+}
+
+.icon-bx-wraper.style-3 .icon-media img {
+    position: relative;
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+    z-index: 1;
+    border-style: none;
+    height: auto;
+    max-width: 100%;
+    vertical-align: middle;
+}
