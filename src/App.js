@@ -5,12 +5,14 @@ import './style/index.scss'
 
 import { HomeBanner } from './components/HomeBanner';
 import { Footer } from './components/Footer';
+import { Dashboard } from './components/Dashboard';
 
 export const App = () => {
   return (
     <>
-      <HomeBanner/>
-      <Footer/>
+      {/* <HomeBanner/> */}
+      <Dashboard/>
+      {/* <Footer/> */}
     </>
   );
 };
