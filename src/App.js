@@ -9,13 +9,15 @@ import { Dashboard } from './components/Dashboard';
 import {CandlestickChart}  from './components/CandlestickChart';
 import {ReactGraph} from './components/ReactGraph'
 import {Navbar} from './components/Navbar'
+import {WhyUs} from './components/WhyUs'
 
 export const App = () => {
   return (
     <>
       <Navbar/>
       <HomeBanner/>
-      <Dashboard/>
+      <WhyUs/>
+      {/* <Dashboard/> */}
       {/* <CandlestickChart/> */}
       {/* <ReactGraph/> */}
       <Footer/>

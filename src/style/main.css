@@ -1,6 +1,7 @@
 body {
     font-family: kanit;
     /* font-family: Poppins,sans-serif; */
+    background-color: rgb(237,230,251);
 }
 
 .btn-gradient{
@@ -133,3 +134,19 @@ body {
   .nav-container .nav-row .nav-controls a {
     padding-left: 20px;
   }
+
+  .icon-bx-wraper.style-2:hover {
+    background-color: #2e42bd !important;
+    -webkit-transform: translateY(-8px);
+    transform: translateY(-8px);
+}
+
+.icon-bx-wraper.style-2 {
+    background-color: #362465 !important;
+    border-radius: 10px;
+    box-shadow: 0 25px 50px rgb(28 46 158 / 30%);
+    display: flex;
+    height: 100%;
+    padding: 32px 30px;
+    transition: all .8s;
+}
