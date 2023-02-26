@@ -6,13 +6,19 @@ import './style/index.scss'
 import { HomeBanner } from './components/HomeBanner';
 import { Footer } from './components/Footer';
 import { Dashboard } from './components/Dashboard';
+import {CandlestickChart}  from './components/CandlestickChart';
+import {ReactGraph} from './components/ReactGraph'
+import {Navbar} from './components/Navbar'
 
 export const App = () => {
   return (
     <>
-      {/* <HomeBanner/> */}
+      <Navbar/>
+      <HomeBanner/>
       <Dashboard/>
-      {/* <Footer/> */}
+      {/* <CandlestickChart/> */}
+      <ReactGraph/>
+      <Footer/>
     </>
   );
 };
