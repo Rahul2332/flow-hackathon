@@ -4,11 +4,11 @@ export const WhyUs = () => {
     return (
         <>
             <div className="my-5">
-                <div className="mb-5">
+                <div className="mb-5 pt-5">
                     <h1 className="display-5 fw-bold text-center" style={{ color: '#362465' }}>Why Trust Us?</h1>
                     <h5 className='text-center w-50 mx-auto' style={{ color: '#7e87bf' }}>Trust comes from experience. Many of the pleased customers may function as a guide for you.</h5>
                 </div>
-                <div className="d-flex pb-5">
+                <div className="d-flex mb-5 pb-5">
                     <div className="w-50 px-4">
                         <div className="row p-4 text-white rounded-4 icon-bx-wraper style-2" style={{width:'100%', backgroundColor:'#362465'}}>
                             <div className="pt-3 col-4">

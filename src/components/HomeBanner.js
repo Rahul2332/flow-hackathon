@@ -5,7 +5,7 @@ export const HomeBanner = () => {
   return (
     <>
       <div className='main-bnr style-1' style={{ flexDirection: 'column', paddingTop:'10px' }}>
-        <nav class="navbar navbar-expand-lg navbar-dark">
+        <nav class="navbar navbar-expand-lg navbar-dark" style={{zIndex:'9'}}>
           <div class="container">
             <a class="navbar-brand me-2" href="https://mdbgo.com/">
               <img
@@ -37,10 +37,10 @@ export const HomeBanner = () => {
               </ul>
 
               <div class="d-flex align-items-center">
-                <button type="button" class="btn btn-outline-primary px-3 me-2 text-white" style={{borderColor:'#9467fe'}}>
+                <button type="button" class="btn px-3 me-2 text-white btn-login" style={{borderColor:'#9467fe'}}>
                   Login
                 </button>
-                <button type="button" class="btn btn-primary me-3" style={{backgroundColor:'#9467fe', borderColor:'#9467fe'}}>
+                <button type="button" class="btn btn-login me-3" style={{backgroundColor:'#9467fe', borderColor:'#9467fe'}}>
                   Sign up for free
                 </button>
                 {/* <a
@@ -53,7 +53,7 @@ export const HomeBanner = () => {
             </div>
           </div>
         </nav>
-        <div className='container' style={{paddingTop:'200px'}}>
+        <div className='container' style={{paddingTop:'150px'}}>
 
           <div className='row align-items-center'>
             <div className='col-12 text-center'>
