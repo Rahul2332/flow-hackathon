@@ -197,6 +197,22 @@ body {
     vertical-align: middle;
 }
 
-#btn-login :hover{
-    background:#9467fe !important;
+.btn-login-outline{
+    color:white;
+}
+
+.btn-login-outline :hover{
+    background-color:#9467fe !important;
+}
+
+.btn-login-contained{
+    color:white !important;
+}
+
+.btn-login-contained :hover{
+    background-color:#9467fe !important;
+}
+
+.signup-div{
+    background:url('https://cryptozone.dexignzone.com/react/demo/static/media/bg6.353c6f49704fc703c32c.jpg')
 }

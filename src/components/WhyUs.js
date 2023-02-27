@@ -15,9 +15,9 @@ export const WhyUs = () => {
                                 <img src="https://cryptozone.dexignzone.com/frontend/react/static/media/wallet.bc0e49e4da0c0f41493831eb288692a6.svg" alt=""></img>
                             </div>
                             <div className="col-8">
-                                <h4 className="fw-bold">Buy Cryptocurrency with cash</h4>
+                                <h4 className="fw-bold">Stock Exchange</h4>
                                 <p className='mt-3' style={{color:'#c5cdff'}}>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley.</p>
-                                <Button variant='contained' style={{textTransform:'capitalize'}} className="my-2 fw-bold px-4 py-2 rounded-3 btn-gradient" >Read More</Button>
+                                <Button variant='contained' style={{textTransform:'capitalize'}} className="my-2 fw-bold px-4 py-2 rounded-3 btn-gradient" >Invest Now</Button>
                             </div>
                         </div>
                     </div>
@@ -27,9 +27,9 @@ export const WhyUs = () => {
                                 <img src="https://cryptozone.dexignzone.com/frontend/react/static/media/friend.6fca92a3966e56a26a49c10fd40ae9b3.svg" alt=""></img>
                             </div>
                             <div className="col-8">
-                                <h4 className="fw-bold">Cryptocurrency Consultancy</h4>
+                                <h4 className="fw-bold">Liquidity Pool</h4>
                                 <p className='mt-3' style={{color:'#c5cdff'}}>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley.</p>
-                                <Button variant='contained' style={{textTransform:'capitalize'}} className="my-2 fw-bold px-4 py-2 rounded-3 btn-gradient" >Read More</Button>
+                                <Button variant='contained' style={{textTransform:'capitalize'}} className="my-2 fw-bold px-4 py-2 rounded-3 btn-gradient" >Invest Now</Button>
                             </div>
                         </div>
                     </div>

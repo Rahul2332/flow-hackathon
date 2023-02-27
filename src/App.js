@@ -11,18 +11,20 @@ import {ReactGraph} from './components/ReactGraph'
 import {Navbar} from './components/Navbar'
 import {WhyUs} from './components/WhyUs'
 import { OneStopSolution } from './components/OneStopSolution';
+import { SignupPage } from './components/SignupPage';
 
 export const App = () => {
   return (
     <>
-      <Navbar/>
+      {/* <Navbar/>
       <HomeBanner/>
       <WhyUs/>
-      <OneStopSolution/>
+      <OneStopSolution/> */}
+      <SignupPage/>
       {/* <Dashboard/> */}
       {/* <CandlestickChart/> */}
       {/* <ReactGraph/> */}
-      <Footer/>
+      {/* <Footer/> */}
     </>
   );
 };
