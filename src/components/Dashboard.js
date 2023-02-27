@@ -65,10 +65,10 @@ export const Dashboard = () => {
                         <Tabs
                             defaultActiveKey="buy"
                             id="justify-tab-example"
-                            className="mb-3 rounded-4"
+                            className=""
                             justify
                         >
-                            <Tab className='shadow rounded-4' eventKey="buy" title="BUY">
+                            <Tab className='pt-5 shadow bg-white' eventKey="buy" title="BUY">
                                 <div className='container px-5 pb-4'>
                                     <div className='row'>
                                         <span className='col-4 text-gradient'>Price</span>
@@ -104,7 +104,7 @@ export const Dashboard = () => {
                                     </div>
                                 </div>
                             </Tab>
-                            <Tab className='shadow rounded-4' eventKey="sell" title="SELL">
+                            <Tab className='pt-5 shadow bg-white' eventKey="sell" title="SELL">
                                 <div className='container px-5 pb-4'>
                                     <div className='row'>
                                         <span className='col-4 text-gradient'>Price</span>
