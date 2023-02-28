@@ -130,13 +130,13 @@ export const HomeBanner = () => {
                 </div>
                 <div className='icon-info'>
                   <h5 className='title mb-0 fw-bold' style={{ color: '#1c2e9e' }}>Flow</h5>
-                  <span className='text-secondary'>BTC</span>
+                  <span className='text-secondary'>FLOW</span>
                 </div>
               </div>
               <div className='icon-content'>
                 <div className='d-flex'>
                   <div className='w-50'>
-                    <h6 className='mb-0 fw-bold' style={{ color: '#1c2e9e' }}>$16,048.40</h6>
+                    <h6 className='mb-0 fw-bold' style={{ color: '#1c2e9e' }}>$1.19 USD</h6>
                     <span className='text-secondary'>Latest Price</span>
                   </div>
                   <div className='w-50 text-end'>
@@ -156,7 +156,7 @@ export const HomeBanner = () => {
                 </div>
                 <div className='icon-info'>
                   <h5 className='title mb-0 fw-bold' style={{ color: '#1c2e9e' }}>Ethereum</h5>
-                  <span className='text-secondary'>BTC</span>
+                  <span className='text-secondary'>ETH</span>
                 </div>
               </div>
               <div className='icon-content'>
