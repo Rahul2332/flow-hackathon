@@ -9,8 +9,8 @@ export const WhyUs = () => {
         <>
             <div className="my-5">
                 <div className="mb-5 pt-5">
-                    <h1 className="display-5 fw-bold text-center" style={{ color: '#362465' }}>Why Trust Us?</h1>
-                    <h5 className='text-center w-50 mx-auto' style={{ color: '#7e87bf' }}>Trust comes from experience. Many of the pleased customers may function as a guide for you.</h5>
+                    <h1 className="display-5 fw-bold text-center" style={{ color: '#362465' }}>INVEST</h1>
+                    <h5 className='text-center w-50 mx-auto' style={{ color: '#7e87bf' }}>Buy, sell & swap the cryptocurrencies you want anytime, anywhere.</h5>
                 </div>
                 <div className="d-flex mb-5 pb-5">
                     <div className="w-50 px-4">
