@@ -17,8 +17,8 @@ export const SignupPageSign = () => {
   const companyName = useRef("");
   const companyEmail = useRef("");
   const companyWallet = useRef("");
-  const companyVal = useRef("");
-  const companyToken = useRef("");
+  const companyTokenPrice = useRef("");
+  const numberOfTokens = useRef("");
 
   const contractName = "AngelFlow";
   const adminAddress = "0x9f78a1504db85885";
@@ -77,7 +77,8 @@ export const SignupPageSign = () => {
       update(ref(db, `Companies/${CompanyId}`), {
         Wallet: String(user.addr),
         Name: companyName.current.value,
-        Minted: false
+        Minted: false,
+        TransactionAmount: numberOfTokens.current.value
       });
       navigate("/")
     }
@@ -166,9 +167,9 @@ export const SignupPageSign = () => {
                   style={{ fontSize: "13px" }}
                   type="number"
                   className="form-control"
-                  id="companyVal"
+                  id="companyTokenPrice"
                   placeholder="Company Valuation"
-                  ref={companyVal}
+                  ref={companyTokenPrice}
                 />
               </div>
               <p
@@ -182,9 +183,9 @@ export const SignupPageSign = () => {
                   style={{ fontSize: "13px" }}
                   type="number"
                   className="form-control"
-                  id="companyToken"
+                  id="numberOfTokens"
                   placeholder="Company Token Supply"
-                  ref={companyToken}
+                  ref={numberOfTokens}
                 />
               </div>
               <Button
