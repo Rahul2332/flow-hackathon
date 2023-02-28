@@ -174,15 +174,17 @@ export const Admin = () => {
   function makeCompanyList(){
     console.log(companyData)
     for(let company in companyData){
-      companyElement.push(
-        <ListItem key={company.Name}>
-          <Button onClick={()=>{mintTokens(companyData[company].Address, companyData[company].TransactionAmount)}}> Click</Button>
-          <ListItemIcon>
-            <FolderIcon />
-          </ListItemIcon>
-          <ListItemText primary={companyData[company].Name} secondary={secondary ? companyData[company].Name : null}/>
-        </ListItem>
-      )
+      if(!companyData[company].Minted){
+        companyElement.push(
+          <ListItem key={company.Name}>
+            <Button onClick={()=>{mintTokens(companyData[company].Address, companyData[company].TransactionAmount)}}> Click</Button>
+            <ListItemIcon>
+              <FolderIcon />
+            </ListItemIcon>
+            <ListItemText primary={companyData[company].Name} secondary={secondary ? companyData[company].Name : null}/>
+          </ListItem>
+        )
+      }
     }
   }
 

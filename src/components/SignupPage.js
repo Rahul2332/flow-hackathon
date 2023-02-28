@@ -1,10 +1,26 @@
 import { Button } from "@mui/material";
 import * as fcl from "@onflow/fcl";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import companyNameLogo from '../images/companyName.png';
 
 export const SignupPage = () => {
+    const [user, setUser] = useState({ loggedIn: null })
     const navigate = useNavigate();
+
+    useEffect(() => {
+        fcl.currentUser.subscribe(setUser)
+      }, []);
+
+    useEffect(() => {
+        navigate("/");
+    }, [user]);
+
+    const login = () => {
+        if(!user.loggedIn)
+            fcl.logIn()
+    }
+
     return (
         <>
             <div className="w-100 signup-div" style={{ height: '100vh' }}>
@@ -17,7 +33,7 @@ export const SignupPage = () => {
                             <div class="mb-3">
                                 <input type="text" class="form-control" id="companyName" placeholder="Company Name" />
                             </div>
-                            <Button onClick={fcl.logIn} className="container fw-bold my-3" variant='contained' style={{backgroundColor:'#9467fe',textTransform:'capitalize'}}>Login</Button>
+                            <Button onClick={login} className="container fw-bold my-3" variant='contained' style={{backgroundColor:'#9467fe',textTransform:'capitalize'}}>Login</Button>
 
                             <p className="mt-5">Don't have an account ?</p>
                             <Button onClick={()=>{navigate("/signup")}} className="container fw-bold mb-3" variant='outlined' style={{borderColor:'#9467fe', color:'#9467fe',textTransform:'capitalize'}}>Sign Up</Button>

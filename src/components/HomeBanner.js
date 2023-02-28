@@ -47,14 +47,16 @@ export const HomeBanner = () => {
               </ul>
 
               <div className="d-flex align-items-center">
-                <Button onClick={()=>{navigate("/login")}} variant='outlined' className="home-login px-4 py-2 me-2 fw-bold" style={{ borderColor: '#9467fe', color: '#9467fe', textTransform: 'capitalize' }}>
                   {user.loggedIn ? 
                     <>
                       <p>{user.addr}</p>
                       <Button onClick={fcl.unauthenticate}> Logout </Button> 
                     </>
-                  : "Login"}
-                </Button>
+                  : 
+                    <Button onClick={()=>{navigate("/login")}} variant='outlined' className="home-login px-4 py-2 me-2 fw-bold" style={{ borderColor: '#9467fe', color: '#9467fe', textTransform: 'capitalize' }}>
+                    Login
+                    </Button>
+                  }
               </div>
             </div>
           </div>
