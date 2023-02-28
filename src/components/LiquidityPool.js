@@ -1,4 +1,6 @@
 import * as React from 'react';
+import { FooterMini } from './FooterMini';
+
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import { Avatar, Button, TextField } from '@mui/material';
@@ -89,7 +91,9 @@ export const LiquidityPool = () => {
                 <div className="container p-0 py-5" style={{ marginLeft: '6.313rem' }}>
                     <div className='dz-side-menu h-100 shadow-lg'>
                         <div className='h-100 d-flex flex-column justify-content-between align-items-center'>
-                            <Avatar src="https://cryptozone.dexignzone.com/react/demo/static/media/pic1.1bdeb2403f02f0457cc6.jpg" />
+                            <Avatar style={{ backgroundColor: 'rgba(149,104,255,.1)' }}>
+                                <AccountBalanceWalletIcon style={{ color: 'white' }} />
+                            </Avatar>
                             <div className='d-flex flex-column justify-content-between h-25 '>
                                 <Avatar style={{ backgroundColor: 'rgba(149,104,255,.1)' }} variant="rounded">
                                     <SettingsIcon style={{ color: 'white' }} />
@@ -101,9 +105,7 @@ export const LiquidityPool = () => {
                                     <NotificationsIcon style={{ color: 'white' }} />
                                 </Avatar>
                             </div>
-                            <Avatar style={{ backgroundColor: 'rgba(149,104,255,.1)' }}>
-                                <AccountBalanceWalletIcon style={{ color: '#9568ff' }} />
-                            </Avatar>
+                            <Avatar src="https://cryptozone.dexignzone.com/react/demo/static/media/pic1.1bdeb2403f02f0457cc6.jpg" />
                         </div>
                     </div>
 
@@ -293,6 +295,7 @@ export const LiquidityPool = () => {
                 </div>
 
             </div>
+            <FooterMini/>
         </>
     );
 }
