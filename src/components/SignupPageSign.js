@@ -1,15 +1,18 @@
 import React, { useRef, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { ref, update } from "firebase/database";
-import {db} from "../firebase"
+import { db } from "../firebase"
 import * as fcl from "@onflow/fcl";
 import { Button } from "@mui/material";
-import companyName from "../images/companyName.png";
+import companyNameLogo from "../images/companyName.png";
 import "../config"
 
 export const SignupPageSign = () => {
   const [user, setUser] = useState({ loggedIn: null });
   const [companyId, setCompanyId] = useState(null);
   const [transactionStatus, setTransactionStatus] = useState(null); // NEW
+
+  const navigate = useNavigate();
 
   const companyName = useRef("");
   const companyEmail = useRef("");
@@ -18,39 +21,18 @@ export const SignupPageSign = () => {
   const companyToken = useRef("");
 
   const contractName = "AngelFlow";
-  const adminAddress = "0xa20fcfc870b0b1af";
+  const adminAddress = "0x9f78a1504db85885";
 
-  useEffect(() => fcl.currentUser.subscribe(setUser), []);
+  useEffect(() => {
+    fcl.currentUser.subscribe(setUser)
+  }, []);
 
-  const hashCode = function (str) {
-    var hash = 0,
-      i,
-      chr;
-    if (str.length === 0) return hash;
-    for (i = 0; i < str.length; i++) {
-      chr = str.charCodeAt(i);
-      hash = (hash << 5) - hash + chr;
-      hash |= 0;
-    }
-    return hash;
-  };
+  useEffect( () => {
 
-let companyStruct = [];
-
-  const setCompanyAccount = async (e) => {
-    e.preventDefault();
-    if(!user.loggedIn)
-        fcl.signUp();
-    if(user.loggedIn){
-    console.log(companyName.current.value);
-    let CompanyId = hashCode(companyName.current.value);
-    console.log(CompanyId);
-
-    update(ref(db, `Companies/${CompanyId}`), {
-      Wallet : String(user.addr),
-      Name: companyName.current.value,
-    });
-  
+    const createUser = async () => {
+      console.log(companyName.current.value);
+      let CompanyId = hashCode(companyName.current.value);
+      console.log(CompanyId);
 
       const transactionId = await fcl.mutate({
         cadence: `
@@ -91,17 +73,53 @@ let companyStruct = [];
       });
       const transaction = await fcl.tx(transactionId).onceSealed();
       console.log(transaction);
+      
+      update(ref(db, `Companies/${CompanyId}`), {
+        Wallet: String(user.addr),
+        Name: companyName.current.value,
+        Minted: false
+      });
     }
+    if (user.loggedIn) {
+      createUser();
+    }
+    
+  }, [user]);
+
+  const hashCode = function (str) {
+    var hash = 0,
+      i,
+      chr;
+    if (str.length === 0) return hash;
+    for (i = 0; i < str.length; i++) {
+      chr = str.charCodeAt(i);
+      hash = (hash << 5) - hash + chr;
+      hash |= 0;
+    }
+    return hash;
   };
 
-  
+  let companyStruct = [];
+
+  const setCompanyAccount = async (e) => {
+    e.preventDefault();
+    if (!user.loggedIn)
+      fcl.signUp();
+  };
+
+
   return (
     <>
-    {user ? <h2>{user.addr}</h2>: <></>}
+      {user.loggedIn ? 
+      <>
+        <h2>{user.addr}</h2>
+        <button onClick={fcl.unauthenticate}>logout</button>
+      </> 
+      : <></>}
       <div className="w-100 signup-div" style={{ height: "100vh" }}>
         <div className="bg-white h-100" style={{ width: "35%" }}>
           <div className="container d-flex flex-column my-auto h-100 justify-content-center">
-            <img className="w-50 ps-2" src={companyName} />
+            <img className="w-50 ps-2" src={companyNameLogo} />
             <div className="px-3 py-4">
               <h4 className="fw-bold mb-4">Sign Up Forum</h4>
               <p

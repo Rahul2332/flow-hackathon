@@ -2,8 +2,11 @@ import Button from '@mui/material/Button';
 import small_devils_logo from '../images/small_devils_logo.png'
 import tradingImg from '../images/tradingImg.svg'
 import cryptoCoin2 from '../images/cryptoCoin2.png'
+import { useNavigate } from 'react-router-dom';
 
 export const HomeBanner = () => {
+  const navigate = useNavigate();
+
   return (
     <>
       <div className='main-bnr style-1' style={{ flexDirection: 'column', paddingTop: '0px' }}>
@@ -39,7 +42,7 @@ export const HomeBanner = () => {
               </ul>
 
               <div className="d-flex align-items-center">
-                <Button variant='outlined' className="home-login px-4 py-2 me-2 fw-bold" style={{ borderColor: '#9467fe', color: '#9467fe', textTransform: 'capitalize' }}>
+                <Button onClick={()=>{navigate("/login")}} variant='outlined' className="home-login px-4 py-2 me-2 fw-bold" style={{ borderColor: '#9467fe', color: '#9467fe', textTransform: 'capitalize' }}>
                   Login
                 </Button>
               </div>
@@ -62,7 +65,7 @@ export const HomeBanner = () => {
               <span className='text-white fw-bold'> Staking Pool </span>
               </p>
               
-              <Button variant='contained' className='px-5 py-3 fw-bold' style={{ background: 'linear-gradient(90deg,#9568ff,#9568ff 99.31%)', textTransform: 'capitalize' }} >Sign Up</Button>
+              <Button onClick={()=>{navigate("/signup")}} variant='contained' className='px-5 py-3 fw-bold' style={{ background: 'linear-gradient(90deg,#9568ff,#9568ff 99.31%)', textTransform: 'capitalize' }} >Sign Up</Button>
               <ul className='image-before'>
                 <li className='left-img'>
                   <img src="https://cryptozone.dexignzone.com/frontend/react/static/media/img1.90c6f431a59671ada976.png"></img>
