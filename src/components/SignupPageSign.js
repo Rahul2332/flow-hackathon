@@ -10,21 +10,21 @@ export const SignupPageSign = () => {
                         <img className="w-50 ps-2" src={companyName} />
                         <div className="px-3 py-4">
                             <h4 className="fw-bold mb-4">Sign Up Forum</h4>
-                            <p className="text-secondary mb-2">Enter Company Name</p>
-                            <div className="mb-3">
-                                <input type="text" className="form-control" id="companyName" placeholder="Company Name" />
+                            <p className="text-black fw-bold mb-1" style={{fontSize:'13px'}}>Enter Company Name</p>
+                            <div className="mb-4">
+                                <input style={{fontSize:'13px'}} type="text" className="form-control" id="companyName" placeholder="Company Name" />
                             </div>
-                            <p className="text-secondary mb-2">Enter Company Email</p>
-                            <div className="mb-3">
-                                <input type="email" className="form-control" id="companyEmail" placeholder="Company Email" />
+                            <p className="text-black fw-bold mb-1" style={{fontSize:'13px'}}>Enter Company Email</p>
+                            <div className="mb-4">
+                                <input style={{fontSize:'13px'}} type="email" className="form-control" id="companyEmail" placeholder="Company Email" />
                             </div>
-                            <p className="text-secondary mb-2">Enter Company Valuation</p>
-                            <div className="mb-3">
-                                <input type="number" className="form-control" id="companyVal" placeholder="Company Valuation" />
+                            <p className="text-black fw-bold mb-1" style={{fontSize:'13px'}}>Enter Company Valuation</p>
+                            <div className="mb-4">
+                                <input style={{fontSize:'13px'}} type="number" className="form-control" id="companyVal" placeholder="Company Valuation" />
                             </div>
-                            <p className="text-secondary mb-2">Enter Company Token Supply</p>
-                            <div className="mb-3">
-                                <input type="number" className="form-control" id="companyToken" placeholder="Company Token Supply" />
+                            <p className="text-black fw-bold mb-1" style={{fontSize:'13px'}}>Enter Company Token Supply</p>
+                            <div className="mb-4">
+                                <input style={{fontSize:'13px'}} type="number" className="form-control" id="companyToken" placeholder="Company Token Supply" />
                             </div>
                             <Button className="container fw-bold my-3" variant='contained' style={{backgroundColor:'#9467fe',textTransform:'capitalize'}}>Sign Up</Button>
 
