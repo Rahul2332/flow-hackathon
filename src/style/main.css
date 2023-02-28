@@ -268,4 +268,9 @@ body {
 
 .home-login:hover{
     background-color:#9467fe !important;
+    color:white !important;
 }   
+
+#home-nav{
+    background-color:white!important
+}

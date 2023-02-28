@@ -6,8 +6,8 @@ import cryptoCoin2 from '../images/cryptoCoin2.png'
 export const HomeBanner = () => {
   return (
     <>
-      <div className='main-bnr style-1' style={{ flexDirection: 'column', paddingTop: '10px' }}>
-        <nav className="navbar sticky-top navbar-expand-lg navbar-dark" style={{ zIndex: '9' }}>
+      <div className='main-bnr style-1' style={{ flexDirection: 'column', paddingTop: '0px' }}>
+        <nav className="shadow-lg navbar sticky-top navbar-expand-lg navbar-light text-dark" id="home-nav" style={{ zIndex: '9' }}>
           <div className="container">
             <a className="navbar-brand me-2" href="https://mdbgo.com/">
               <img
@@ -39,7 +39,7 @@ export const HomeBanner = () => {
               </ul>
 
               <div className="d-flex align-items-center">
-                <Button variant='outlined' className="home-login px-4 py-2 me-2 fw-bold" style={{ borderColor: '#9467fe', color: 'white', textTransform: 'capitalize' }}>
+                <Button variant='outlined' className="home-login px-4 py-2 me-2 fw-bold" style={{ borderColor: '#9467fe', color: '#9467fe', textTransform: 'capitalize' }}>
                   Login
                 </Button>
               </div>
@@ -53,8 +53,14 @@ export const HomeBanner = () => {
               {/* <h1>Your Globel OTC desk for <br />Cryptocurrencies</h1>
               <p className="text text-primary text-gradient">Transfer USD, EUR, or Crypto and start trading today!</p> */}
               <img className='w-50' src={tradingImg}/>
-              <h1 className='mb-2'>Invest in everything</h1>
-              <p className="text text-primary text-gradient w-50 mx-auto">Online platform to invest in stocks, derivatives, mutual funds, and more..</p>
+              <h1 className='mb-3'>Invest in everything</h1>
+              <p className="mb-5 text text-primary text-gradient w-50 mx-auto">Online platform to invest in <br/>
+              <span className='text-white fw-bold'> Stocks </span>
+               , 
+              <span className='text-white fw-bold'> Liquidity Pool </span>
+               , 
+              <span className='text-white fw-bold'> Staking Pool </span>
+              </p>
               
               <Button variant='contained' className='px-5 py-3 fw-bold' style={{ background: 'linear-gradient(90deg,#9568ff,#9568ff 99.31%)', textTransform: 'capitalize' }} >Sign Up</Button>
               <ul className='image-before'>
