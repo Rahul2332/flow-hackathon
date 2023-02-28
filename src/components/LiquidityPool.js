@@ -1,4 +1,7 @@
 import * as React from 'react';
+import { useEffect, useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import * as fcl from "@onflow/fcl";
 import { FooterMini } from './FooterMini';
 
 import Tab from 'react-bootstrap/Tab';
@@ -44,6 +47,12 @@ import coinExchange from '../images/coinExchange.svg'
 export const LiquidityPool = () => {
 
     const [age, setAge] = React.useState('');
+
+    const [user, setUser] = useState({ loggedIn: null })
+
+    useEffect(() => {
+        fcl.currentUser.subscribe(setUser)
+      }, []);
 
     const handleChange = (event) => {
         setAge(event.target.value);

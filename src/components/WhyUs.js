@@ -33,7 +33,7 @@ export const WhyUs = () => {
                             <div className="col-8">
                                 <h4 className="fw-bold">Liquidity Pool</h4>
                                 <p className='mt-3' style={{ color: '#c5cdff' }}>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley.</p>
-                                <Button variant='contained' style={{ textTransform: 'capitalize' }} className="my-2 fw-bold px-4 py-2 rounded-3 btn-gradient" >Invest Now</Button>
+                                <Button onClick={()=>{navigate("/liquidity-pool")}} variant='contained' style={{ textTransform: 'capitalize' }} className="my-2 fw-bold px-4 py-2 rounded-3 btn-gradient" >Invest Now</Button>
                             </div>
                         </div>
                     </div>

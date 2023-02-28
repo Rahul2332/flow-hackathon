@@ -1,8 +1,11 @@
 import { ApexChart } from './ApexChart';
 import * as React from 'react';
+import { useEffect, useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import * as fcl from "@onflow/fcl";
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
-import { Avatar, Button, TextField } from '@mui/material';
+import { Avatar, Button, TextField, useStepContext } from '@mui/material';
 import { blue, pink, purple } from '@mui/material/colors';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 
@@ -40,7 +43,15 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 export const Dashboard = () => {
   const [age, setAge] = React.useState("");
   const [user, setUser] = useState({ loggedIn: null })
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+
+  const contractName = "AngelFlow";
+  const adminAddress = "0x9f78a1504db85885";
+
+  const [pricePerTokenS, setPricePerTokenS] = useState(0);
+  const [numberOfTokensS, setNumberOfTokensS] = useState(0);
+  const [pricePerTokenB, setPricePerTokenB] = useState(0);
+  const [numberOfTokensB, setNumberOfTokensB] = useState(0);
 
   useEffect(() => {
       fcl.currentUser.subscribe(setUser)
@@ -48,6 +59,114 @@ export const Dashboard = () => {
 
   const handleChange = (event) => {
     setAge(event.target.value);
+  };
+
+  const sellTokens = async () => {
+    const transactionId = await fcl.mutate({
+      cadence: `
+      // Transfer Tokens
+
+      import ${contractName} from ${adminAddress}
+
+      // This transaction is a template for a transaction that
+      // could be used by anyone to send tokens to another account
+      // that owns a Vault
+      transaction {
+
+        // Temporary Vault object that holds the balance that is being transferred
+        var temporaryVault: @AngelFlow.Vault
+        //let providerRef: &FlowToken.Vault{FungibleToken.Provider}
+
+
+        prepare(acct: AuthAccount) {
+          // withdraw tokens from your vault by borrowing a reference to it
+          // and calling the withdraw function with that reference
+
+          let vaultRef = acct.borrow<&AngelFlow.Vault>(from: /storage/MainVault)
+              ?? panic("Could not borrow a reference to the owner's vault")
+          self.temporaryVault <- vaultRef.withdraw(amount: 10.0)
+        }
+
+        execute {
+          // get the recipient's public account object
+          let recipient = getAccount(${adminAddress})
+
+          // get the recipient's Receiver reference to their Vault
+          // by borrowing the reference from the public capability
+          let receiverRef = recipient.getCapability(/public/MainReceiver)
+                            .borrow<&AngelFlow.Vault{AngelFlow.Receiver}>()
+                            ?? panic("Could not borrow a reference to the receiver")
+
+          // deposit your tokens to their Vault
+          receiverRef.deposit(from: <-self.temporaryVault)
+
+          log("Transfer succeeded!")
+        }
+      }
+      `,
+      payer: fcl.authz,
+      proposer: fcl.authz,
+      authorizations: [fcl.authz],
+      limit: 50,
+    });
+
+    const transaction = await fcl.tx(transactionId).onceSealed();
+    console.log(transaction);
+  };
+
+  const recipientAddress = "0xc2353367241c3a69"; // recipient's account address
+  const amount = "20.0"; // amount of Flow tokens to transfer
+  const buyTokens = async () => {
+    const transactionId = await fcl.mutate({
+      cadence: `
+      import FungibleToken from 0x9a0766d93b6608b7
+      import FlowToken from 0x7e60df042a9c0868
+      import ${contractName} from ${adminAddress}
+      
+      transaction(recipient: Address, amount: UFix64) {
+          let providerRef: &FlowToken.Vault{FungibleToken.Provider}
+          prepare(acct: AuthAccount) {
+              self.providerRef = acct.borrow<&FlowToken.Vault{FungibleToken.Provider}>(from: /storage/flowTokenVault)!
+
+          }
+      
+          execute {
+              let recipientAcc = getAccount(recipient)
+              let receiverRef = recipientAcc.getCapability(/public/flowTokenReceiver).borrow<&FlowToken.Vault{FungibleToken.Receiver}>()
+              ?? panic("Could not borrow a reference to the receiver")
+
+              let flowTokens <- self.providerRef.withdraw(amount: amount) as! @FlowToken.Vault
+              receiverRef.deposit(from: <-flowTokens)
+
+
+              let recipienta = getAccount(${adminAddress})
+
+          // get the recipienta's Receiver reference to their Vault
+          // by borrowing the reference from the public capability
+              let tokenProvider = recipienta.getCapability(/public/MainProvider)
+                            .borrow<&AngelFlow.Vault{AngelFlow.Provider}>()
+                            ?? panic("Could not borrow a reference to the Provider")
+              let tokens <- tokenProvider.withdraw(amount: 10.0)
+              let tokenReceiver = recipienta.getCapability(/public/MainReceiver)
+                            .borrow<&AngelFlow.Vault{AngelFlow.Receiver}>()
+                            ?? panic("Could not borrow a reference to the receiver")
+              tokenReceiver.deposit(from: <- tokens)
+              
+          }
+      }
+      `,
+      args: (arg, t) => [
+        arg(recipientAddress, t.Address),
+        arg(amount, t.UFix64),
+      ],
+      payer: fcl.authz,
+      proposer: fcl.authz,
+      authorizations: [fcl.authz],
+      limit: 50,
+    });
+
+    const transaction = await fcl.tx(transactionId).onceSealed();
+    console.log(transaction);
   };
 
   return (
@@ -154,6 +273,8 @@ export const Dashboard = () => {
                                     <DirectionsIcon />
                                 </IconButton> */}
               </Paper>
+              { user.loggedIn ?
+              <Button onClick={fcl.unauthenticate} className='fw-bold mx-2 px-4 py-2' style={{textTransform:'capitalize'}} variant='outlined' color='error'>Log Out</Button> : <></>}
             </Navbar.Collapse>
           </Container>
         </Navbar>
@@ -339,93 +460,12 @@ export const Dashboard = () => {
               style={{ backgroundColor: "rgb(244,239,255)" }}
             >
               <Tabs
-                defaultActiveKey="buy"
+                defaultActiveKey="sell"
                 id="justify-tab-example"
                 className=""
                 style={{ borderRadius: "20px 20px 0 0" }}
                 justify
               >
-                <Tab
-                  className="pt-4 shadow-sm bg-white"
-                  style={{ borderRadius: "0 0 20px 20px" }}
-                  eventKey="buy"
-                  title="BUY"
-                >
-                  <div className="container px-5 pb-3">
-                    <div className="row mb-3">
-                      <Box sx={{ minWidth: 120 }}>
-                        <FormControl fullWidth>
-                          <InputLabel id="demo-simple-select-label">
-                            Company Name
-                          </InputLabel>
-                          <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            value={age}
-                            label="CompanyName"
-                            onChange={handleChange}
-                          >
-                            <MenuItem value={10}>Ten</MenuItem>
-                            <MenuItem value={20}>Twenty</MenuItem>
-                            <MenuItem value={30}>Thirty</MenuItem>
-                          </Select>
-                        </FormControl>
-                      </Box>
-                    </div>
-
-                    <div className="row">
-                      <span className="col text-gradient">Price per Token</span>
-                      {/* <span className='col text-end text-secondary'>BALANCE: <mark className='text-gradient fw-bold' style={{background:'none'}}> $3123.9</mark></span> */}
-                    </div>
-                    {/* <TextField className='w-100' id="filled-basic" label="USDT" placeholder='0.00' variant="filled" /> */}
-                    <div className="input-group mb-3 ">
-                      <input
-                        type="text"
-                        className="form-control"
-                        placeholder="0.00"
-                      />
-                      <span className="input-group-text">FLOW</span>
-                    </div>
-
-                    <div className="row">
-                      <span className="text-gradient">Number of Tokens</span>
-                      {/* <span className='col-8 text-end text-secondary'>BALANCE: <mark className='text-gradient fw-bold' style={{ background: 'none' }}> $3123.9</mark></span> */}
-                    </div>
-                    {/* <TextField className='w-100' id="filled-basic" label="USDT" placeholder='0.00' variant="filled" /> */}
-                    <div className="input-group mb-3 ">
-                      <input
-                        type="number"
-                        className="form-control"
-                        placeholder="0.00"
-                      />
-                      <span className="input-group-text">Tokens</span>
-                    </div>
-
-                    <div className="row">
-                      <span className="col text-gradient">Total Amount</span>
-                      {/* <span className='col text-end text-secondary'>BALANCE: <mark className='text-gradient fw-bold' style={{background:'none'}}> $3123.9</mark></span> */}
-                    </div>
-                    {/* <TextField className='w-100' id="filled-basic" label="USDT" placeholder='0.00' variant="filled" /> */}
-                    <div className="input-group mb-3 ">
-                      <input
-                        disabled
-                        type="text"
-                        className="form-control"
-                        placeholder="0.00"
-                      />
-                      <span className="input-group-text">FLOW</span>
-                    </div>
-                    <div className="d-flex justify-content-center py-3">
-                      <Button
-                        className="fw-bold px-5 py-2"
-                        style={{ background: "#9568ff" }}
-                        variant="contained"
-                      >
-                        Buy
-                      </Button>
-                    </div>
-                  </div>
-                </Tab>
                 <Tab
                   className="pt-4 shadow-sm bg-white"
                   style={{ borderRadius: "0 0 20px 20px" }}
@@ -446,9 +486,10 @@ export const Dashboard = () => {
                             label="CompanyName"
                             onChange={handleChange}
                           >
-                            <MenuItem value={10}>Ten</MenuItem>
-                            <MenuItem value={20}>Twenty</MenuItem>
-                            <MenuItem value={30}>Thirty</MenuItem>
+                            <MenuItem value={10}>Google</MenuItem>
+                            <MenuItem value={20}>Apple</MenuItem>
+                            <MenuItem value={30}>Microsoft</MenuItem>
+                            <MenuItem value={40}>ABC</MenuItem>
                           </Select>
                         </FormControl>
                       </Box>
@@ -464,6 +505,7 @@ export const Dashboard = () => {
                         type="text"
                         className="form-control"
                         placeholder="0.00"
+                        onChange={(e)=>{setPricePerTokenS(e.target.value)}}
                       />
                       <span className="input-group-text">FLOW</span>
                     </div>
@@ -478,6 +520,7 @@ export const Dashboard = () => {
                         type="number"
                         className="form-control"
                         placeholder="0.00"
+                        onChange={(e)=>{setNumberOfTokensS(e.target.value)}}
                       />
                       <span className="input-group-text">Tokens</span>
                     </div>
@@ -492,7 +535,7 @@ export const Dashboard = () => {
                         disabled
                         type="text"
                         className="form-control"
-                        placeholder="0.00"
+                        placeholder={(pricePerTokenS * numberOfTokensS).toString()}
                       />
                       <span className="input-group-text">FLOW</span>
                     </div>
@@ -501,8 +544,94 @@ export const Dashboard = () => {
                         className="fw-bold px-5 py-2"
                         style={{ background: "#9568ff" }}
                         variant="contained"
+                        onClick={sellTokens}
                       >
                         Sell
+                      </Button>
+                    </div>
+                  </div>
+                </Tab>
+                <Tab
+                  className="pt-4 shadow-sm bg-white"
+                  style={{ borderRadius: "0 0 20px 20px" }}
+                  eventKey="buy"
+                  title="BUY"
+                >
+                  <div className="container px-5 pb-3">
+                    <div className="row mb-3">
+                      <Box sx={{ minWidth: 120 }}>
+                        <FormControl fullWidth>
+                          <InputLabel id="demo-simple-select-label">
+                            Company Name
+                          </InputLabel>
+                          <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={age}
+                            label="CompanyName"
+                            onChange={handleChange}
+                          >
+                            <MenuItem value={10}>Google</MenuItem>
+                            <MenuItem value={20}>Apple</MenuItem>
+                            <MenuItem value={30}>Microsoft</MenuItem>
+                            <MenuItem value={40}>ABC</MenuItem>
+                          </Select>
+                        </FormControl>
+                      </Box>
+                    </div>
+
+                    <div className="row">
+                      <span className="col text-gradient">Price per Token</span>
+                      {/* <span className='col text-end text-secondary'>BALANCE: <mark className='text-gradient fw-bold' style={{background:'none'}}> $3123.9</mark></span> */}
+                    </div>
+                    {/* <TextField className='w-100' id="filled-basic" label="USDT" placeholder='0.00' variant="filled" /> */}
+                    <div className="input-group mb-3 ">
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder="0.00"
+                        onChange={(e)=>{setPricePerTokenB(e.target.value)}}
+                      />
+                      <span className="input-group-text">FLOW</span>
+                    </div>
+
+                    <div className="row">
+                      <span className="text-gradient">Number of Tokens</span>
+                      {/* <span className='col-8 text-end text-secondary'>BALANCE: <mark className='text-gradient fw-bold' style={{ background: 'none' }}> $3123.9</mark></span> */}
+                    </div>
+                    {/* <TextField className='w-100' id="filled-basic" label="USDT" placeholder='0.00' variant="filled" /> */}
+                    <div className="input-group mb-3 ">
+                      <input
+                        type="number"
+                        className="form-control"
+                        placeholder="0.00"
+                        onChange={(e)=>{setNumberOfTokensB(e.target.value)}}
+                      />
+                      <span className="input-group-text">Tokens</span>
+                    </div>
+
+                    <div className="row">
+                      <span className="col text-gradient">Total Amount</span>
+                      {/* <span className='col text-end text-secondary'>BALANCE: <mark className='text-gradient fw-bold' style={{background:'none'}}> $3123.9</mark></span> */}
+                    </div>
+                    {/* <TextField className='w-100' id="filled-basic" label="USDT" placeholder='0.00' variant="filled" /> */}
+                    <div className="input-group mb-3 ">
+                      <input
+                        disabled
+                        type="text"
+                        className="form-control"
+                        placeholder={(pricePerTokenB * numberOfTokensB).toString()}
+                      />
+                      <span className="input-group-text">FLOW</span>
+                    </div>
+                    <div className="d-flex justify-content-center py-3">
+                      <Button
+                        className="fw-bold px-5 py-2"
+                        style={{ background: "#9568ff" }}
+                        variant="contained"
+                        onClick={buyTokens}
+                      >
+                        Buy
                       </Button>
                     </div>
                   </div>
