@@ -274,3 +274,11 @@ body {
 #home-nav{
     background-color:white!important
 }
+
+.dashboard-market-list:hover{
+    background-color:rgba(158,207,250,.3);
+}
+
+.text-darkpurple{
+    color:#362465
+}

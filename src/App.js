@@ -8,8 +8,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { HomeBanner } from './components/HomeBanner';
 import { Footer } from './components/Footer';
 import { Dashboard } from './components/Dashboard';
-import {CandlestickChart}  from './components/CandlestickChart';
-import {ReactGraph} from './components/ReactGraph'
+// import {CandlestickChart}  from './components/CandlestickChart';
 import {Navbar} from './components/Navbar'
 import {WhyUs} from './components/WhyUs'
 import { OneStopSolution } from './components/OneStopSolution';
