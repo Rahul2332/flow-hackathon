@@ -216,3 +216,56 @@ body {
 .signup-div{
     background:url('https://cryptozone.dexignzone.com/react/demo/static/media/bg6.353c6f49704fc703c32c.jpg')
 }
+
+.dz-side-menu {
+    background: #362465;
+    border-radius: 0 1.875rem 1.875rem 0;
+    bottom: 1.25rem;
+    box-shadow: 0 0 50px 0 rgb(0 0 0 / 10%);
+    display: flex;
+    flex-direction: column-reverse;
+    height: auto;
+    height: 100vh;
+    justify-content: space-between;
+    padding: 1.5625rem 0.75rem;
+    position: fixed;
+    left: 0;
+    text-align: center;
+    top: 0;
+    width: 4.313rem;
+}
+
+.sticky-top{
+    position: sticky;
+    top: 0;
+}
+
+.nav-tabs{
+    background:white !important;
+}
+
+.bubbles-down::after {
+    background: #fcdde8 !important;
+    border-radius: 50%;
+    bottom: -6.5rem;
+    content: "";
+    height: 343px;
+    position: absolute;
+    right: -43px;
+    width: 325px;
+    z-index: 1;
+}
+
+.dashboard-header{
+    background-color: rgba(255, 255, 255, .15); 
+    background-color: #36246514;
+    backdrop-filter: blur(6px);
+    height: 5rem;
+    transition: all .2s ease;
+    z-index: 1;
+    z-index: 3;
+}
+
+.home-login:hover{
+    background-color:#9467fe !important;
+}   
