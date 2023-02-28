@@ -37,6 +37,12 @@ import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 
+import {FooterMini} from './FooterMini';
+import appleIcon from '../images/companies/apple-logo.png';
+import facebookIcon from '../images/companies/facebook-app-symbol.png';
+import googleIcon from '../images/companies/google.png';
+import microsoftIcon from '../images/companies/microsoft.png';
+
 export const Dashboard = () => {
     const [age, setAge] = React.useState('');
 
@@ -318,7 +324,7 @@ export const Dashboard = () => {
                                 <h4 className='fw-bold mb-4 px-5' style={{ color: '#362465' }}>Market Previews</h4>
 
                                 <div className='py-2 px-5 row dashboard-market-list align-center'>
-                                    <div className='col-3'><Avatar variant='rounded' /></div>
+                                    <div className='col-3'><Avatar variant='rounded' style={{backgroundColor:'rgb(244,239,255)'}}><img className='w-100 p-2' src={appleIcon}/></Avatar></div>
                                     <div className='col-6'>
                                         <h6 className='fw-bold mb-0' style={{ color: '#362465' }}>LTC/Year</h6>
                                         <p className='mb-0 text-secondary'>March</p>
@@ -330,7 +336,7 @@ export const Dashboard = () => {
                                 </div>
 
                                 <div className='py-2 px-5 row dashboard-market-list align-center'>
-                                    <div className='col-3'><Avatar variant='rounded' /></div>
+                                    <div className='col-3'><Avatar variant='rounded' style={{backgroundColor:'rgb(244,239,255)'}}><img className='w-100 p-2' src={microsoftIcon}/></Avatar></div>
                                     <div className='col-6'>
                                         <h6 className='fw-bold mb-0' style={{ color: '#362465' }}>LTC/Year</h6>
                                         <p className='mb-0 text-secondary'>March</p>
@@ -342,7 +348,7 @@ export const Dashboard = () => {
                                 </div>
 
                                 <div className='py-2 px-5 row dashboard-market-list align-center'>
-                                    <div className='col-3'><Avatar variant='rounded' /></div>
+                                    <div className='col-3'><Avatar variant='rounded' style={{backgroundColor:'rgb(244,239,255)'}}><img className='w-100 p-2' src={googleIcon}/></Avatar></div>
                                     <div className='col-6'>
                                         <h6 className='fw-bold mb-0' style={{ color: '#362465' }}>LTC/Year</h6>
                                         <p className='mb-0 text-secondary'>March</p>
@@ -354,7 +360,7 @@ export const Dashboard = () => {
                                 </div>
 
                                 <div className='py-2 px-5 row dashboard-market-list align-center'>
-                                    <div className='col-3'><Avatar variant='rounded' /></div>
+                                    <div className='col-3'><Avatar variant='rounded' style={{backgroundColor:'rgb(244,239,255)'}}><img className='w-100 p-2' src={facebookIcon}/></Avatar></div>
                                     <div className='col-6'>
                                         <h6 className='fw-bold mb-0' style={{ color: '#362465' }}>LTC/Year</h6>
                                         <p className='mb-0 text-secondary'>March</p>
@@ -371,6 +377,7 @@ export const Dashboard = () => {
 
                 </div>
             </div>
+            <FooterMini/>
         </>
     );
 }
