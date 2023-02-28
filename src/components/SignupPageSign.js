@@ -1,5 +1,5 @@
 import { Button } from "@mui/material";
-import companyName from '../images/companyName.png';
+import companyNameLogo from '../images/companyName.png';
 
 export const SignupPageSign = () => {
     return (
@@ -7,7 +7,7 @@ export const SignupPageSign = () => {
             <div className="w-100 signup-div" style={{ height: '100vh' }}>
                 <div className="bg-white h-100" style={{ width: '35%' }}>
                     <div className="container d-flex flex-column my-auto h-100 justify-content-center">
-                        <img className="w-50 ps-2" src={companyName} />
+                        <img className="w-50 ps-2" src={companyNameLogo} />
                         <div className="px-3 py-4">
                             <h4 className="fw-bold mb-4">Sign Up Forum</h4>
                             <p className="text-black fw-bold mb-1" style={{fontSize:'13px'}}>Enter Company Name</p>

@@ -15,6 +15,7 @@ import { OneStopSolution } from './components/OneStopSolution';
 import { SignupPage } from './components/SignupPage';
 import { SignupPageSign } from './components/SignupPageSign';
 import {Home} from './components/Home';
+import { LiquidityPool } from './components/LiquidityPool';
 
 export const App = () => {
   return (
@@ -34,6 +35,7 @@ export const App = () => {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/login" element={<SignupPage />} />
           <Route path="/signup" element={<SignupPageSign />} />
+          <Route path='/liquidity-pool' element={<LiquidityPool/>} />
         </Routes>
     </Router>
     </>
