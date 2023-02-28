@@ -56,6 +56,7 @@ export const HomeBanner = () => {
                     </>
                   : "Login"}
                 </Button>
+                <Button className='px-4 py-2' variant='outlined' color='error'>Log Out</Button>
               </div>
             </div>
           </div>
