@@ -1,21 +1,23 @@
-import logo from './logo.svg';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './style/main.css'
-import './style/index.scss'
+import logo from "./logo.svg";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./style/main.css";
+import "./style/index.scss";
 
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
-import { HomeBanner } from './components/HomeBanner';
-import { Footer } from './components/Footer';
-import { Dashboard } from './components/Dashboard';
+import { HomeBanner } from "./components/HomeBanner";
+import { Footer } from "./components/Footer";
+import { Dashboard } from "./components/Dashboard";
 // import {CandlestickChart}  from './components/CandlestickChart';
-import {Navbar} from './components/Navbar'
-import {WhyUs} from './components/WhyUs'
-import { OneStopSolution } from './components/OneStopSolution';
+
 import { SignupPage } from './components/SignupPage';
 import { SignupPageSign } from './components/SignupPageSign';
 import {Home} from './components/Home';
 import { LiquidityPool } from './components/LiquidityPool';
+import { Navbar } from "./components/Navbar";
+import { WhyUs } from "./components/WhyUs";
+import { OneStopSolution } from "./components/OneStopSolution";
+import { Admin } from "./components/Admin";
 
 export const App = () => {
   return (
@@ -36,8 +38,9 @@ export const App = () => {
           <Route path="/login" element={<SignupPage />} />
           <Route path="/signup" element={<SignupPageSign />} />
           <Route path='/liquidity-pool' element={<LiquidityPool/>} />
+          <Route path="/admin" element={<Admin />} />
         </Routes>
-    </Router>
+      </Router>
     </>
   );
 };
