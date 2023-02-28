@@ -79,6 +79,7 @@ export const SignupPageSign = () => {
         Name: companyName.current.value,
         Minted: false
       });
+      navigate("/")
     }
     if (user.loggedIn) {
       createUser();

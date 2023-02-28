@@ -1,11 +1,16 @@
 import Button from '@mui/material/Button';
+import { useState } from 'react';
 import small_devils_logo from '../images/small_devils_logo.png'
+import * as fcl from "@onflow/fcl";
 import tradingImg from '../images/tradingImg.svg'
 import cryptoCoin2 from '../images/cryptoCoin2.png'
 import { useNavigate } from 'react-router-dom';
 
 export const HomeBanner = () => {
   const navigate = useNavigate();
+
+  const [user, setUser] = useState({ loggedIn: null });
+  fcl.currentUser.subscribe(setUser)
 
   return (
     <>
@@ -43,7 +48,12 @@ export const HomeBanner = () => {
 
               <div className="d-flex align-items-center">
                 <Button onClick={()=>{navigate("/login")}} variant='outlined' className="home-login px-4 py-2 me-2 fw-bold" style={{ borderColor: '#9467fe', color: '#9467fe', textTransform: 'capitalize' }}>
-                  Login
+                  {user.loggedIn ? 
+                    <>
+                      <p>{user.addr}</p>
+                      <Button onClick={fcl.unauthenticate}> Logout </Button> 
+                    </>
+                  : "Login"}
                 </Button>
               </div>
             </div>
