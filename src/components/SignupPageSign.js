@@ -42,7 +42,7 @@ export const SignupPageSign = () => {
             {
             let vaultA <- ${contractName}.createVault(amount: 0.0)
 
-            let companyA = ${contractName}.createCompany(cName: "google", cEmail: "google@gmail.com", cId: 2, cWallet: 0xb82fd25a873578cf, cTokenSupply: 30.0, cTokenPrice: 1.0)
+            let companyA = ${contractName}.createCompany(cName: "ABC", cEmail: "abc@gmail.com", cId: 2, cWallet: 0xeb14454b4855b22f, cTokenSupply: 30.0, cTokenPrice: 1.5)
 
             acct.save<${contractName}.Company>(companyA, to: /storage/MainCompany)
             acct.save<@${contractName}.Vault>(<-vaultA, to: /storage/MainVault)
@@ -160,7 +160,7 @@ export const SignupPageSign = () => {
                 className="text-black fw-bold mb-1"
                 style={{ fontSize: "13px" }}
               >
-                Enter Company Valuation
+                Enter Initial Company Token Price
               </p>
               <div className="mb-4">
                 <input
@@ -168,7 +168,7 @@ export const SignupPageSign = () => {
                   type="number"
                   className="form-control"
                   id="companyTokenPrice"
-                  placeholder="Company Valuation"
+                  placeholder="Company Token Price"
                   ref={companyTokenPrice}
                 />
               </div>

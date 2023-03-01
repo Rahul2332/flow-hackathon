@@ -1,6 +1,6 @@
 import { ApexChart } from './ApexChart';
 import * as React from 'react';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as fcl from "@onflow/fcl";
 import Tab from 'react-bootstrap/Tab';
@@ -50,6 +50,10 @@ export const Dashboard = () => {
     const [age, setAge] = React.useState("");
     const [user, setUser] = useState({ loggedIn: null })
     const navigate = useNavigate();
+
+    useEffect(() => {
+      fcl.currentUser.subscribe(setUser)
+    }, []);
     
     const contractName = "AngelFlow";
     const adminAddress = "0x9f78a1504db85885";
@@ -116,7 +120,7 @@ export const Dashboard = () => {
       console.log(transaction);
     };
     
-    const recipientAddress = "0xc2353367241c3a69"; // recipient's account address
+    const recipientAddress = "0xd3e7aeacc48f7c35"; // recipient's account address
     const amount = "20.0"; // amount of Flow tokens to transfer
     const buyTokens = async () => {
       const transactionId = await fcl.mutate({
@@ -127,36 +131,36 @@ export const Dashboard = () => {
         
         transaction(recipient: Address, amount: UFix64) {
             let providerRef: &FlowToken.Vault{FungibleToken.Provider}
+
+            let tokenReceiver: &AngelFlow.Vault{AngelFlow.Receiver}
+
             prepare(acct: AuthAccount) {
                 self.providerRef = acct.borrow<&FlowToken.Vault{FungibleToken.Provider}>(from: /storage/flowTokenVault)!
-    
+                self.tokenReceiver = acct.getCapability(/public/MainReceiver)
+                              .borrow<&AngelFlow.Vault{AngelFlow.Receiver}>()
+                              ?? panic("Could not borrow a reference to the receiver")
             }
         
             execute {
                 let recipientAcc = getAccount(recipient)
                 let receiverRef = recipientAcc.getCapability(/public/flowTokenReceiver).borrow<&FlowToken.Vault{FungibleToken.Receiver}>()
                 ?? panic("Could not borrow a reference to the receiver")
-    
+  
                 let flowTokens <- self.providerRef.withdraw(amount: amount) as! @FlowToken.Vault
                 receiverRef.deposit(from: <-flowTokens)
-    
-    
-                let recipienta = getAccount(${adminAddress})
-    
-            // get the recipienta's Receiver reference to their Vault
-            // by borrowing the reference from the public capability
-                let tokenProvider = recipienta.getCapability(/public/MainProvider)
+  
+  
+                let recipient = getAccount(${adminAddress})
+  
+                let tokenProvider = recipient.getCapability(/public/MainProvider)
                               .borrow<&AngelFlow.Vault{AngelFlow.Provider}>()
                               ?? panic("Could not borrow a reference to the Provider")
                 let tokens <- tokenProvider.withdraw(amount: 10.0)
-                let tokenReceiver = recipienta.getCapability(/public/MainReceiver)
-                              .borrow<&AngelFlow.Vault{AngelFlow.Receiver}>()
-                              ?? panic("Could not borrow a reference to the receiver")
-                tokenReceiver.deposit(from: <- tokens)
+                
+                self.tokenReceiver.deposit(from: <- tokens)
                 
             }
-        }
-        `,
+        }`,
         args: (arg, t) => [
           arg(recipientAddress, t.Address),
           arg(amount, t.UFix64),
@@ -164,7 +168,7 @@ export const Dashboard = () => {
         payer: fcl.authz,
         proposer: fcl.authz,
         authorizations: [fcl.authz],
-        limit: 50,
+        limit: 999    ,
       });
     
       const transaction = await fcl.tx(transactionId).onceSealed();

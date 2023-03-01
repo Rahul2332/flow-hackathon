@@ -16,11 +16,6 @@ export const UserSignup = () => {
       }, []);
 
     useEffect(() => {
-        if(user.loggedIn){
-            createTrader();
-
-            navigate("/");
-        }
         const createTrader = async () => {
             const transactionId = await fcl.mutate({
                 cadence: `
@@ -64,6 +59,11 @@ export const UserSignup = () => {
             });
             const transaction = await fcl.tx(transactionId).onceSealed();
             console.log(transaction);
+        }
+        if(user.loggedIn){
+            createTrader();
+
+            navigate("/");
         }
     }, [user]);
 

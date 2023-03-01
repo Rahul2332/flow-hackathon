@@ -1,45 +1,24 @@
 import * as React from 'react';
-import { useEffect, useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import * as fcl from "@onflow/fcl";
 import { FooterMini } from './FooterMini';
 
-import Tab from 'react-bootstrap/Tab';
-import Tabs from 'react-bootstrap/Tabs';
-import { Avatar, Button, TextField } from '@mui/material';
-import { blue, pink, purple } from '@mui/material/colors';
-import AssignmentIcon from '@mui/icons-material/Assignment';
+import { Avatar, Button } from '@mui/material';
 
-import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 
-import Paper from '@mui/material/Paper';
-import InputBase from '@mui/material/InputBase';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
-import DirectionsIcon from '@mui/icons-material/Directions';
 
-import graph1 from '../images/graph1.png';
-import graph2 from '../images/graph2.png';
-import graph3 from '../images/graph3.png';
-import timeline from '../images/timeline.png'
 
 import SettingsIcon from '@mui/icons-material/Settings';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
-import DashboardIcon from '@mui/icons-material/Dashboard';
 
 import walletCoins from '../images/walletWithCoins.svg';
 import coinExchange from '../images/coinExchange.svg'
@@ -47,6 +26,8 @@ import coinExchange from '../images/coinExchange.svg'
 export const LiquidityPool = () => {
 
     const [age, setAge] = React.useState('');
+    const [usdc, setusdc] = React.useState(0);
+    const [fusd, setfusd] = React.useState(0);
 
     var lpAddress = "0xd5a801ab74372f66"
 
@@ -54,7 +35,7 @@ export const LiquidityPool = () => {
 
     useEffect(() => {
         fcl.currentUser.subscribe(setUser)
-      }, []);
+    }, []);
 
     const handleChange = (event) => {
         setAge(event.target.value);
@@ -62,8 +43,8 @@ export const LiquidityPool = () => {
 
     const createPair = async () => {
         try {
-          const transactionId = await fcl.mutate({
-            cadence: `
+            const transactionId = await fcl.mutate({
+                cadence: `
             import FiatToken from 0xa983fecbed621163
             import FUSD from 0xe223d8a629e49c68
             
@@ -99,22 +80,22 @@ export const LiquidityPool = () => {
                 }
             }
             `,
-            payer: fcl.authz,
-            proposer: fcl.authz,
-            authorizations: [fcl.authz],
-            limit: 999,
-          });
-    
-          const transaction = await fcl.tx(transactionId).onceSealed();
-          console.log(transaction);
+                payer: fcl.authz,
+                proposer: fcl.authz,
+                authorizations: [fcl.authz],
+                limit: 999,
+            });
+
+            const transaction = await fcl.tx(transactionId).onceSealed();
+            console.log(transaction);
         } catch (error) {
-          console.error("Transaction error:", error);
+            console.error("Transaction error:", error);
         }
-      };
-    
+    };
+
     const createEmptyVault = async () => {
-    const transactionId = await fcl.mutate({
-        cadence: `
+        const transactionId = await fcl.mutate({
+            cadence: `
         import FungibleToken from 0x9a0766d93b6608b7
         import FiatToken from 0xa983fecbed621163
 
@@ -132,19 +113,19 @@ export const LiquidityPool = () => {
             }
         }
         `,
-        payer: fcl.authz,
-        proposer: fcl.authz,
-        authorizations: [fcl.authz],
-        limit: 50
+            payer: fcl.authz,
+            proposer: fcl.authz,
+            authorizations: [fcl.authz],
+            limit: 50
         })
-        
+
         const transaction = await fcl.tx(transactionId).onceSealed()
         console.log(transaction)
     }
 
     const getAllLp = async () => {
-    const address = await fcl.query({
-        cadence: `
+        const address = await fcl.query({
+            cadence: `
         import SwapFactory from 0xcbed4c301441ded2
 
         pub fun main(): [Address] {
@@ -156,18 +137,18 @@ export const LiquidityPool = () => {
             }
         }
         `,
-    })
-    console.log(address)
-    if(lpAddress == null)
-    lpAddress = address[address.length - 1];
+        })
+        console.log(address)
+        if (lpAddress == null)
+            lpAddress = address[address.length - 1];
     }
 
-    const getPairInfo = async ()=>{
-    if(lpAddress == null)
-        await getAllLp();
+    const getPairInfo = async () => {
+        if (lpAddress == null)
+            await getAllLp();
 
-    const pairInfo = await fcl.query({
-        cadence: `
+        const pairInfo = await fcl.query({
+            cadence: `
         import SwapInterfaces from 0xddb929038d45d4b3                                     
         import SwapConfig from 0xddb929038d45d4b3                                         
                                                                                             
@@ -180,17 +161,17 @@ export const LiquidityPool = () => {
             return pairPublicRef.getPairInfo()                                               
         }
         `,
-        args: (arg, t) => [arg(lpAddress, t.Address)]
-    })
-    console.log(pairInfo)
-    return(pairInfo)
+            args: (arg, t) => [arg(lpAddress, t.Address)]
+        })
+        console.log(pairInfo)
+        return (pairInfo)
     }
 
     const addLiquidity = async () => {
-    const pairInfo = await getPairInfo();
+        const pairInfo = await getPairInfo();
 
-    const transactionId = await fcl.mutate({
-        cadence: `
+        const transactionId = await fcl.mutate({
+            cadence: `
         import FungibleToken from 0x9a0766d93b6608b7
         import SwapFactory from 0xcbed4c301441ded2
         import SwapInterfaces from 0xddb929038d45d4b3
@@ -269,71 +250,71 @@ export const LiquidityPool = () => {
                 lpTokenCollectionRef!.deposit(pairAddr: pairAddr, lpTokenVault: <- lpTokenVault)
             }
         }`,
-        args: (arg, t) => [
-        arg(pairInfo[0], t.String), 
-        arg(pairInfo[1], t.String), 
-        arg("10.0", t.UFix64), 
-        arg("4.0", t.UFix64), 
-        arg("8.0", t.UFix64), 
-        arg("3.0", t.UFix64)
-        ],
-        payer: fcl.authz,
-        proposer: fcl.authz,
-        authorizations: [fcl.authz],
-        limit: 999
+            args: (arg, t) => [
+                arg(pairInfo[0], t.String),
+                arg(pairInfo[1], t.String),
+                arg("5.0", t.UFix64),
+                arg("1.0", t.UFix64),
+                arg("8.0", t.UFix64),
+                arg("3.0", t.UFix64)
+            ],
+            payer: fcl.authz,
+            proposer: fcl.authz,
+            authorizations: [fcl.authz],
+            limit: 999
         })
-        
+
         const transaction = await fcl.tx(transactionId).onceSealed()
         console.log(transaction)
     }
 
-    const InToOut = async () => {
-    const Out = await fcl.query({
-        cadence: `
+    const InToOut = async (input) => {
+        const Out = await fcl.query({
+            cadence: `
         import SwapRouter from 0x2f8af5ed05bbde0d                           
         
         pub fun main(amountIn: UFix64, tokenKeyPath: [String]): [AnyStruct] {
         return SwapRouter.getAmountsOut(amountIn: amountIn, tokenKeyPath: tokenKeyPath)
         }
         `,
-        args: (arg, t) => [
-        arg("2.0", t.UFix64),
-        arg(["A.a983fecbed621163.FiatToken", "A.7e60df042a9c0868.FlowToken", "A.e223d8a629e49c68.FUSD"], t.Array(t.String))
-        ],
-        payer: fcl.authz,
-        proposer: fcl.authz,
-        authorizations: [fcl.authz],
-        limit: 999
+            args: (arg, t) => [
+                arg(input.toString(), t.UFix64),
+                arg(["A.a983fecbed621163.FiatToken", "A.7e60df042a9c0868.FlowToken", "A.e223d8a629e49c68.FUSD"], t.Array(t.String))
+            ],
+            payer: fcl.authz,
+            proposer: fcl.authz,
+            authorizations: [fcl.authz],
+            limit: 999
         })
-        
-        return(Out)
+        setfusd(Out);
+        console.log(Out)
     }
 
     const OutToIn = async () => {
-    const In = await fcl.query({
-        cadence: `
+        const In = await fcl.query({
+            cadence: `
         import SwapRouter from 0x2f8af5ed05bbde0d                           
         
         pub fun main(amountOut: UFix64, tokenKeyPath: [String]): [AnyStruct] {
         return SwapRouter.getAmountsIn(amountOut: amountOut, tokenKeyPath: tokenKeyPath)
         }
         `,
-        args: (arg, t) => [
-        arg("2.0", t.UFix64),
-        arg(["A.a983fecbed621163.FiatToken", "A.7e60df042a9c0868.FlowToken", "A.e223d8a629e49c68.FUSD"], t.Array(t.String))
-        ],
-        payer: fcl.authz,
-        proposer: fcl.authz,
-        authorizations: [fcl.authz],
-        limit: 999
+            args: (arg, t) => [
+                arg(fusd.toString(), t.UFix64),
+                arg(["A.a983fecbed621163.FiatToken", "A.7e60df042a9c0868.FlowToken", "A.e223d8a629e49c68.FUSD"], t.Array(t.String))
+            ],
+            payer: fcl.authz,
+            proposer: fcl.authz,
+            authorizations: [fcl.authz],
+            limit: 999
         })
-        
-        return(In)
+        setusdc(In);
+        console(In)
     }
 
     const swapUsdcFusd = async () => {
-    const transactionId = await fcl.mutate({
-        cadence: `
+        const transactionId = await fcl.mutate({
+            cadence: `
         import FungibleToken from 0x9a0766d93b6608b7
         import SwapRouter from 0x2f8af5ed05bbde0d
 
@@ -366,19 +347,19 @@ export const LiquidityPool = () => {
             }
         }
         `,
-        args: (arg, t) => [
-        arg("1.0", t.UFix64),
-        arg("2.0", t.UFix64),
-        arg(["A.a983fecbed621163.FiatToken", "A.7e60df042a9c0868.FlowToken", "A.e223d8a629e49c68.FUSD"], t.Array(t.String)),
-        arg("0x3e0b67751ae9a885", t.Address),
-        arg(Date.now().toString(), t.UFix64)
-        ],
-        payer: fcl.authz,
-        proposer: fcl.authz,
-        authorizations: [fcl.authz],
-        limit: 999
+            args: (arg, t) => [
+                arg("1.0", t.UFix64),
+                arg("2.0", t.UFix64),
+                arg(["A.a983fecbed621163.FiatToken", "A.7e60df042a9c0868.FlowToken", "A.e223d8a629e49c68.FUSD"], t.Array(t.String)),
+                arg("0x3e0b67751ae9a885", t.Address),
+                arg(Date.now().toString(), t.UFix64)
+            ],
+            payer: fcl.authz,
+            proposer: fcl.authz,
+            authorizations: [fcl.authz],
+            limit: 999
         })
-        
+
         const transaction = await fcl.tx(transactionId).onceSealed()
         console.log(transaction)
     }
@@ -398,7 +379,7 @@ export const LiquidityPool = () => {
                             {/* <Navbar.Text>
                                 Signed in as: <a href="#login">Mark Otto</a>
                             </Navbar.Text> */}
-                            <Paper
+                            {/* <Paper
                                 component="form"
                                 sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 250 }}
                             >
@@ -413,11 +394,8 @@ export const LiquidityPool = () => {
                                 <IconButton type="button" sx={{ p: '10px' }} aria-label="search" style={{ color: '#9568ff' }}>
                                     <SearchIcon />
                                 </IconButton>
-                                {/* <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-                                <IconButton color="primary" sx={{ p: '10px' }} aria-label="directions">
-                                    <DirectionsIcon />
-                                </IconButton> */}
-                            </Paper>
+                            </Paper> */}
+                            <Button onClick={createPair} className='fw-bold px-3 py-2' variant='contained' style={{ textTransform: 'capitalize' }}>Create Pool</Button>
                         </Navbar.Collapse>
                     </Container>
                 </Navbar>
@@ -442,121 +420,107 @@ export const LiquidityPool = () => {
                             <Avatar src="https://cryptozone.dexignzone.com/react/demo/static/media/pic1.1bdeb2403f02f0457cc6.jpg" />
                         </div>
                     </div>
-
-                    <div className='row'>
-                        <div className='col-4'>
-                            <div className='bg-light shadow rounded-4' style={{ width: '100%' }}>
-                                <div className='w-100 text-center text-white py-3' style={{ borderRadius: '20px 20px 0 0', backgroundColor: 'rgb(237,230,251)' }}>
-                                    <span className='fw-bold text-darkpurple' style={{ fontSize: '20px' }}>Liquidity Pool 1</span>
-                                </div>
-                                <img className='w-100' src={walletCoins} />
-                                <div className='p-4'>
-                                    <div className='row'>
-                                        <div className='col'>
-                                            <h4 className='fw-bold' style={{ color: '#362465' }}>Bitcoin</h4>
+                    <div className='container w-100'>
+                        <div className='row w-100'>
+                            <div className='col-4'>
+                                <div className='bg-light shadow rounded-4' style={{ width: '100%' }}>
+                                    <div className='w-100 text-center text-white py-3' style={{ borderRadius: '20px 20px 0 0', backgroundColor: 'rgb(237,230,251)' }}>
+                                        <span className='fw-bold text-darkpurple' style={{ fontSize: '20px' }}>Liquidity Pool 1</span>
+                                    </div>
+                                    <img className='w-100' src={walletCoins} />
+                                    <div className='p-4'>
+                                        <div className='row'>
+                                            <div className='col-6'>
+                                                <h4 className='fw-bold' style={{ color: '#362465' }}>Fiat</h4>
+                                            </div>
+                                            <div className='col-6'>
+                                                <div className="input-group mb-3 w-100">
+                                                    <input disabled type="text" className="form-control" placeholder="25.034" aria-label="Coin Value" aria-describedby="basic-addon2" />
+                                                    <span className="input-group-text" id="basic-addon2">FIAT</span>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div className='col-8'>
-                                            <div className="input-group mb-3 w-100">
-                                                <input disabled type="text" className="form-control" placeholder="Coin Value" aria-label="Coin Value" aria-describedby="basic-addon2" />
-                                                <span className="input-group-text" id="basic-addon2">BTC</span>
+
+                                        <div className='row'>
+                                            <div className='col-6'>
+                                                <h4 className='fw-bold' style={{ color: '#362465' }}>Flow</h4>
+                                            </div>
+                                            <div className='col-6'>
+                                                <div className="input-group mb-3 w-100">
+                                                    <input disabled type="text" className="form-control" placeholder="301.565" aria-label="Coin Value" aria-describedby="basic-addon2" />
+                                                    <span className="input-group-text" id="basic-addon2">FLOW</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className='row'>
+                                            <div className='col-6'>
+                                                <h4 className='fw-bold' style={{ color: '#362465' }}>LP Value</h4>
+                                            </div>
+                                            <div className='col-6'>
+                                                <div className="input-group mb-3 w-100">
+                                                    <input disabled type="text" className="form-control" placeholder="7.634" aria-label="Coin Value" aria-describedby="basic-addon2" />
+                                                    <span className="input-group-text" id="basic-addon2"></span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div className='row'>
-                                        <div className='col'>
-                                            <h4 className='fw-bold' style={{ color: '#362465' }}>Flow</h4>
-                                        </div>
-                                        <div className='col-8'>
-                                            <div className="input-group mb-3 w-100">
-                                                <input disabled type="text" className="form-control" placeholder="Coin Value" aria-label="Coin Value" aria-describedby="basic-addon2" />
-                                                <span className="input-group-text" id="basic-addon2">FLOW</span>
-                                            </div>
-                                        </div>
+                                    <div className='bg-dark shadow w-100' style={{ borderRadius: '0 0 20px 20px' }}>
+                                        <Button onClick={addLiquidity} className='py-3 w-50 fw-bold' style={{ borderRadius: '0 0 0 20px', fontSize: '15px' }} variant='contained'>Invest</Button>
+                                        <Button className='py-3 w-50 fw-bold' style={{ borderRadius: '0 0 20px 0', fontSize: '15px' }} variant='contained'>Swap</Button>
                                     </div>
-                                </div>
-
-                                <div className='bg-dark shadow w-100' style={{ borderRadius: '0 0 20px 20px' }}>
-                                    <Button className='py-3 w-50 fw-bold' style={{ borderRadius: '0 0 0 20px', fontSize: '15px' }} variant='contained'>Invest</Button>
-                                    <Button className='py-3 w-50 fw-bold' style={{ borderRadius: '0 0 20px 0', fontSize: '15px' }} variant='contained'>Swap</Button>
                                 </div>
                             </div>
-                        </div>
 
-                        <div className='col-4'>
-                            <div className='bg-light shadow rounded-4' style={{ width: '100%' }}>
-                                <div className='w-100 text-center text-white py-3' style={{ borderRadius: '20px 20px 0 0', backgroundColor: 'rgb(237,230,251)' }}>
-                                    <span className='fw-bold text-darkpurple' style={{ fontSize: '20px' }}>Liquidity Pool 1</span>
-                                </div>
-                                <img className='w-100' src={walletCoins} />
-                                <div className='p-4'>
-                                    <div className='row'>
-                                        <div className='col'>
-                                            <h4 className='fw-bold' style={{ color: '#362465' }}>Bitcoin</h4>
+                            <div className='col-4'>
+                                <div className='bg-light shadow rounded-4' style={{ width: '100%' }}>
+                                    <div className='w-100 text-center text-white py-3' style={{ borderRadius: '20px 20px 0 0', backgroundColor: 'rgb(237,230,251)' }}>
+                                        <span className='fw-bold text-darkpurple' style={{ fontSize: '20px' }}>Liquidity Pool 2</span>
+                                    </div>
+                                    <img className='w-100' src={walletCoins} />
+                                    <div className='p-4'>
+                                        <div className='row'>
+                                            <div className='col-6'>
+                                                <h4 className='fw-bold' style={{ color: '#362465' }}>USDC</h4>
+                                            </div>
+                                            <div className='col-6'>
+                                                <div className="input-group mb-3 w-100">
+                                                    <input disabled type="text" className="form-control" placeholder="20.701" aria-label="Coin Value" aria-describedby="basic-addon2" />
+                                                    <span className="input-group-text" id="basic-addon2">USDC</span>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div className='col-8'>
-                                            <div className="input-group mb-3 w-100">
-                                                <input disabled type="text" className="form-control" placeholder="Coin Value" aria-label="Coin Value" aria-describedby="basic-addon2" />
-                                                <span className="input-group-text" id="basic-addon2">BTC</span>
+
+                                        <div className='row'>
+                                            <div className='col-6'>
+                                                <h4 className='fw-bold' style={{ color: '#362465' }}>FUSD</h4>
+                                            </div>
+                                            <div className='col-6'>
+                                                <div className="input-group mb-3 w-100">
+                                                    <input disabled type="text" className="form-control" placeholder="1.935" aria-label="Coin Value" aria-describedby="basic-addon2" />
+                                                    <span className="input-group-text" id="basic-addon2">FUSD</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className='row'>
+                                            <div className='col-6'>
+                                                <h4 className='fw-bold' style={{ color: '#362465' }}>LP Value</h4>
+                                            </div>
+                                            <div className='col-6'>
+                                                <div className="input-group mb-3 w-100">
+                                                    <input disabled type="text" className="form-control" placeholder="6.324" aria-label="Coin Value" aria-describedby="basic-addon2" />
+                                                    <span className="input-group-text" id="basic-addon2"></span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div className='row'>
-                                        <div className='col'>
-                                            <h4 className='fw-bold' style={{ color: '#362465' }}>Flow</h4>
-                                        </div>
-                                        <div className='col-8'>
-                                            <div className="input-group mb-3 w-100">
-                                                <input disabled type="text" className="form-control" placeholder="Coin Value" aria-label="Coin Value" aria-describedby="basic-addon2" />
-                                                <span className="input-group-text" id="basic-addon2">FLOW</span>
-                                            </div>
-                                        </div>
+                                    <div className='bg-dark shadow w-100' style={{ borderRadius: '0 0 20px 20px' }}>
+                                        <Button onClick={addLiquidity} className='py-3 w-50 fw-bold' style={{ borderRadius: '0 0 0 20px', fontSize: '15px' }} variant='contained'>Invest</Button>
+                                        <Button className='py-3 w-50 fw-bold' style={{ borderRadius: '0 0 20px 0', fontSize: '15px' }} variant='contained'>Swap</Button>
                                     </div>
-                                </div>
-
-                                <div className='bg-dark shadow w-100' style={{ borderRadius: '0 0 20px 20px' }}>
-                                    <Button className='py-3 w-50 fw-bold' style={{ borderRadius: '0 0 0 20px', fontSize: '15px' }} variant='contained'>Invest</Button>
-                                    <Button className='py-3 w-50 fw-bold' style={{ borderRadius: '0 0 20px 0', fontSize: '15px' }} variant='contained'>Swap</Button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className='col-4'>
-                            <div className='bg-light shadow rounded-4' style={{ width: '100%' }}>
-                                <div className='w-100 text-center text-white py-3' style={{ borderRadius: '20px 20px 0 0', backgroundColor: 'rgb(237,230,251)' }}>
-                                    <span className='fw-bold text-darkpurple' style={{ fontSize: '20px' }}>Liquidity Pool 1</span>
-                                </div>
-                                <img className='w-100' src={walletCoins} />
-                                <div className='p-4'>
-                                    <div className='row'>
-                                        <div className='col'>
-                                            <h4 className='fw-bold' style={{ color: '#362465' }}>Bitcoin</h4>
-                                        </div>
-                                        <div className='col-8'>
-                                            <div className="input-group mb-3 w-100">
-                                                <input disabled type="text" className="form-control" placeholder="Coin Value" aria-label="Coin Value" aria-describedby="basic-addon2" />
-                                                <span className="input-group-text" id="basic-addon2">BTC</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className='row'>
-                                        <div className='col'>
-                                            <h4 className='fw-bold' style={{ color: '#362465' }}>Flow</h4>
-                                        </div>
-                                        <div className='col-8'>
-                                            <div className="input-group mb-3 w-100">
-                                                <input disabled type="text" className="form-control" placeholder="Coin Value" aria-label="Coin Value" aria-describedby="basic-addon2" />
-                                                <span className="input-group-text" id="basic-addon2">FLOW</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className='bg-dark shadow w-100' style={{ borderRadius: '0 0 20px 20px' }}>
-                                    <Button className='py-3 w-50 fw-bold' style={{ borderRadius: '0 0 0 20px', fontSize: '15px' }} variant='contained'>Invest</Button>
-                                    <Button className='py-3 w-50 fw-bold' style={{ borderRadius: '0 0 20px 0', fontSize: '15px' }} variant='contained'>Swap</Button>
                                 </div>
                             </div>
                         </div>
@@ -565,7 +529,7 @@ export const LiquidityPool = () => {
 
                 <div className='w-100 p-5 m-0' style={{ height: '500px', backgroundColor: 'rgb(237,230,251)' }}>
                     <div className='row' style={{ marginLeft: '6.313rem' }}>
-                        <h1 className='text-center fw-bold text-darkpurple'>Check</h1>
+                        <h1 className='text-center fw-bold text-darkpurple'>Swap Coins</h1>
                         <div className='bg-white rounded-4 shadow row'>
                             <div className='col-4'>
                                 <div className='p-5 rounded-4'>
@@ -578,17 +542,14 @@ export const LiquidityPool = () => {
                                             inputProps={{ 'aria-label': 'Without label' }}
                                         >
                                             <MenuItem value="">
-                                                <em>None</em>
+                                                <em>USDC</em>
                                             </MenuItem>
-                                            <MenuItem value={10}>Ten</MenuItem>
-                                            <MenuItem value={20}>Twenty</MenuItem>
-                                            <MenuItem value={30}>Thirty</MenuItem>
                                         </Select>
                                     </FormControl>
 
                                     <h4 className='mt-4'>Number of Coins</h4>
                                     <div className="input-group mb-3 w-100">
-                                        <input type="text" className="form-control py-3" placeholder="Coin Value" aria-label="Coin Value" aria-describedby="basic-addon2" />
+                                        <input type="text" className="form-control py-3" placeholder="2.0" aria-label="Coin Value" aria-describedby="basic-addon2" />
                                         <span className="input-group-text" id="basic-addon2">Coin</span>
                                     </div>
                                 </div>
@@ -596,6 +557,7 @@ export const LiquidityPool = () => {
 
                             <div className='col-4 align-self-center'>
                                 <img className='w-100' src={coinExchange} />
+                                <Button onClick={(e)=>{InToOut(e.target.value)}} className='mx-auto w-100' variant='contained'>COnvert</Button>
                             </div>
 
                             <div className='col-4'>
@@ -609,17 +571,14 @@ export const LiquidityPool = () => {
                                             inputProps={{ 'aria-label': 'Without label' }}
                                         >
                                             <MenuItem value="">
-                                                <em>None</em>
+                                                <em>FUSD</em>
                                             </MenuItem>
-                                            <MenuItem value={10}>Ten</MenuItem>
-                                            <MenuItem value={20}>Twenty</MenuItem>
-                                            <MenuItem value={30}>Thirty</MenuItem>
                                         </Select>
                                     </FormControl>
 
                                     <h4 className='mt-4'>Number of Coins</h4>
                                     <div className="input-group mb-3 w-100">
-                                        <input type="text" className="form-control py-3" placeholder="Coin Value" aria-label="Coin Value" aria-describedby="basic-addon2" />
+                                        <input type="text" className="form-control py-3" placeholder="0.196" aria-label="Coin Value" aria-describedby="basic-addon2" />
                                         <span className="input-group-text" id="basic-addon2">Coin</span>
                                     </div>
                                 </div>
@@ -629,7 +588,7 @@ export const LiquidityPool = () => {
                 </div>
 
             </div>
-            <FooterMini/>
+            <FooterMini />
         </>
     );
 }
