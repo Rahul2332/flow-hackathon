@@ -18,24 +18,26 @@ export const WhyUs = () => {
                 <div className="d-flex mb-5 pb-5">
                     <div className="w-50 px-4">
                         <div className="row p-4 text-white rounded-4 icon-bx-wraper style-2" style={{ width: '100%', backgroundColor: '#362465' }}>
-                            <div className="pt-3 col-4">
+                            <div className="pt-3 col-4 justify-content-center">
                                 <img src="https://cryptozone.dexignzone.com/frontend/react/static/media/wallet.bc0e49e4da0c0f41493831eb288692a6.svg" alt=""></img>
                             </div>
                             <div className="col-8">
                                 <h4 className="fw-bold">Stock Exchange</h4>
-                                <p className='mt-3' style={{ color: '#c5cdff' }}>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley.</p>
+                                <p className='mt-3' style={{ color: '#c5cdff' }}>Angel-Flow Stock Exchange is all about bringing traditional Stock Exchange Market on-Chain.</p>
+                                <p className="fw-bold" style={{ color: '#c5cdff' }}>Driving Innovation in DeFi- Ecosystem on Flow BlockChain</p>
                                 <Button onClick={()=>{navigate("/dashboard")}} variant='contained' style={{ textTransform: 'capitalize' }} className="my-2 fw-bold px-4 py-2 rounded-3 btn-gradient" >Invest Now</Button>
                             </div>
                         </div>
                     </div>
                     <div className="w-50 px-4">
                         <div className="row p-4 text-white rounded-4 icon-bx-wraper style-2" style={{ width: '100%', backgroundColor: '#362465' }}>
-                            <div className="pt-3 col-4">
+                            <div className="pt-3 col-4 justify-content-center">
                                 <img src="https://cryptozone.dexignzone.com/frontend/react/static/media/friend.6fca92a3966e56a26a49c10fd40ae9b3.svg" alt=""></img>
                             </div>
                             <div className="col-8">
                                 <h4 className="fw-bold">Liquidity Pool</h4>
-                                <p className='mt-3' style={{ color: '#c5cdff' }}>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley.</p>
+                                <p className='mt-3' style={{ color: '#c5cdff' }}>Liquidity pooling involves pooling together funds from multiple users to create a larger pool of assets.</p>
+                                <p className="fw-bold" style={{ color: '#c5cdff' }}>Implemented with the help of Increment.Fi’s contracts.</p>
                                 <Button onClick={()=>{navigate("/liquidity-pool")}} variant='contained' style={{ textTransform: 'capitalize' }} className="my-2 fw-bold px-4 py-2 rounded-3 btn-gradient" >Invest Now</Button>
                             </div>
                         </div>
