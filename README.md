@@ -44,7 +44,6 @@
     <li><a href="#license">Guide to setup the project locally</a></li>
     <li><a href="#contract-address">Contract Address</a></li>
     <li><a href="#acknowledgments">Acknowledgments and References</a></li>
-    <li><a href="#contact">Project Demo Pictures</a></li>
 
   </ol>
 
@@ -63,25 +62,25 @@ The Flow blockchain has emerged as a popular platform for creating DeFi applicat
 
 ### AngelFlow Stock Exchange
 
-<img src='assets/workflow-devilslist.png'>
+<img src='./src/images/StockExchange.png'>
 
 ### AngelFlow Liquidity Pools
 
-<img src='assets/market-place-working.png'>
+<img src='./src/images/liq.png'>
 
 ### Tech-Stack
 
 <p align="center">
-<a href="https://tezos.com/"><img src="./src/images/Firebase.png"   width="40%" height="40%"></a>
+<a href="https://firebase.google.com/"><img src="./src/images/Firebase.png"   width="150px" height="150px"></a>
 <p align="center" float="left">
-<a href="https://smartpy.io/"><img src="./src/images/flow2.png" width="30%" height="30%"></a>
-<a href="https://reactjs.org/"><img src="./src/images/React.png"  width="30%" height="30%"></a>
+<a href="https://developers.flow.com/"><img src="./src/images/flow2.png" width="150px" height="150px"></a>
+<a href="https://reactjs.org/"><img src="./src/images/React.png"  width="150px" height="150px"></a>
 </p>
 <p align="center" float="left">
-<a href="https://ipfs.io/"><img src="./src/images/Increment.Fi.jpeg" width="30%" height="30%"></a>
+<a href="https://increment.fi/"><img src="./src/images/Increment.Fi.jpeg" width="150px" height="150px"></a>
 </p>
 <p align="center" float="left">
-<a href="https://ipfs.io/"><img src="./src/images/Flowns.png" width="30%" height="30%"></a>
+<a href="https://docs.flowns.org/"><img src="./src/images/Flowns.png" width="150px" height="150px"></a>
 </p>
 
 <p align="right"><a href="#readme-top">Top</a></p>
@@ -143,9 +142,3 @@ Expansion of investment options: As the DeFi ecosystem on the Flow blockchain gr
 - [README Template](https://github.com/othneildrew/Best-README-Template/edit/master/README.md)
 
 <p align="right"><a href="#readme-top">Top</a></p>
-
-## Project Demo Pictures
-
-You can refer the sample shots our projects <a href="https://drive.google.com/drive/folders/1vyppSZRm_aS8BcY_G4efxLQuYp651AkP?usp=sharing">Click Here</a>
-
-<p align="right">(<a href="#readme-top">Top</a>)</p>
