@@ -72,18 +72,17 @@ The Flow blockchain has emerged as a popular platform for creating DeFi applicat
 ### Tech-Stack
 
 <p align="center">
-<a href="https://tezos.com/"><img src="./src/assets/images/Firebase.png"   width="40%" height="40%"></a>
+<a href="https://tezos.com/"><img src="./src/images/Firebase.png"   width="40%" height="40%"></a>
 <p align="center" float="left">
-<a href="https://smartpy.io/"><img src="./src/assets/images/flow2.png" width="30%" height="30%"></a>
-<a href="https://reactjs.org/"><img src="./src/assets/images/React.png"  width="30%" height="30%"></a>
+<a href="https://smartpy.io/"><img src="./src/images/flow2.png" width="30%" height="30%"></a>
+<a href="https://reactjs.org/"><img src="./src/images/React.png"  width="30%" height="30%"></a>
 </p>
 <p align="center" float="left">
-<a href="https://ipfs.io/"><img src="./src/assets/images/Increment.Fi.jpeg" width="30%" height="30%"></a>
+<a href="https://ipfs.io/"><img src="./src/images/Increment.Fi.jpeg" width="30%" height="30%"></a>
 </p>
 <p align="center" float="left">
-<a href="https://ipfs.io/"><img src="./src/assets/images/Flowns.png" width="30%" height="30%"></a>
+<a href="https://ipfs.io/"><img src="./src/images/Flowns.png" width="30%" height="30%"></a>
 </p>
-
 
 <p align="right"><a href="#readme-top">Top</a></p>
 
@@ -95,8 +94,7 @@ We are new to the Flow Block chain are so we ran into some issues while the dura
 2. Flow Playground - We also faced problems with the flow playground as it puts a limit on the number of contracts that can be deployed at once. This posed problems when we wanted to interact with existing contracts provided by increment.fi
 3. Wallets - We had to spend much of our initial time to find a suitable wallet, as most wallets did not provide private keys. We required private keys to deploy contract to testnet.
 4. Flow CLI - The documentation for the flow cli was confusing and it did not provide any information or examples for testnet.
-5. Increment.Fi - The increment.fi contracts are not documented for its cadence functions to use easily.
-                - We face major issue to do the swap transaction while passing an argument requiring the  unix timestamp. Due to this swapping the tokens were not working.
+5. Increment.Fi - The increment.fi contracts are not documented for its cadence functions to use easily. - We face major issue to do the swap transaction while passing an argument requiring the unix timestamp. Due to this swapping the tokens were not working.
 
 <p align="right"><a href="#readme-top">Top</a></p>
 
