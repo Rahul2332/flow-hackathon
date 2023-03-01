@@ -48,6 +48,8 @@ export const LiquidityPool = () => {
 
     const [age, setAge] = React.useState('');
 
+    var lpAddress = "0xd5a801ab74372f66"
+
     const [user, setUser] = useState({ loggedIn: null })
 
     useEffect(() => {
