@@ -18,6 +18,7 @@ import { Navbar } from "./components/Navbar";
 import { WhyUs } from "./components/WhyUs";
 import { OneStopSolution } from "./components/OneStopSolution";
 import { Admin } from "./components/Admin";
+import { UserSignup } from "./components/UserSignup";
 
 export const App = () => {
   return (
@@ -36,6 +37,7 @@ export const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/login" element={<SignupPage />} />
+          <Route path="/user-signup" element={<UserSignup />} />
           <Route path="/signup" element={<SignupPageSign />} />
           <Route path='/liquidity-pool' element={<LiquidityPool/>} />
           <Route path="/admin" element={<Admin />} />

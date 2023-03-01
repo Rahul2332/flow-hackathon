@@ -4,7 +4,7 @@ import { ref, update } from "firebase/database";
 import { db } from "../firebase"
 import * as fcl from "@onflow/fcl";
 import { Button } from "@mui/material";
-import companyNameLogo from "../images/companyName.png";
+import companyNameLogo from "../images/angelFlow.png";
 import "../config"
 
 export const SignupPageSign = () => {

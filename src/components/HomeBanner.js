@@ -49,16 +49,21 @@ export const HomeBanner = () => {
               </ul>
 
               <div className="d-flex align-items-center">
-                  {user.loggedIn ? 
-                    <>
-                      <p>{user.addr}</p>
-                      <Button onClick={fcl.unauthenticate}> Logout </Button> 
-                    </>
-                  : 
-                    <Button onClick={()=>{navigate("/login")}} variant='outlined' className="home-login px-4 py-2 me-2 fw-bold" style={{ borderColor: '#9467fe', color: '#9467fe', textTransform: 'capitalize' }}>
-                    Login
+                {user.loggedIn ?
+                  <>
+                    <p>{user.addr}</p>
+                    <Button onClick={fcl.unauthenticate}> Logout </Button>
+                  </>
+                  :
+                  <>
+                    <Button onClick={() => { navigate("/login") }} variant='outlined' className="home-login px-4 py-2 me-2 fw-bold" style={{ borderColor: '#9467fe', color: '#9467fe', textTransform: 'capitalize' }}>
+                      Company Login
                     </Button>
-                  }
+                    <Button onClick={fcl.logIn} variant='outlined' className="home-login px-4 py-2 me-2 fw-bold" style={{ borderColor: '#9467fe', color: '#9467fe', textTransform: 'capitalize' }}>
+                      User Login
+                    </Button>
+                  </>
+                }
               </div>
             </div>
           </div>
@@ -69,17 +74,18 @@ export const HomeBanner = () => {
             <div className='col-12 text-center'>
               {/* <h1>Your Globel OTC desk for <br />Cryptocurrencies</h1>
               <p className="text text-primary text-gradient">Transfer USD, EUR, or Crypto and start trading today!</p> */}
-              <img className='w-50' src={tradingImg}/>
+              <img className='w-50' src={tradingImg} />
               <h1 className='mb-3'>Invest in everything</h1>
-              <p className="mb-5 text text-primary text-gradient w-50 mx-auto">Online platform to invest in <br/>
-              <span className='text-white fw-bold'> Stocks </span>
-               , 
-              <span className='text-white fw-bold'> Liquidity Pool </span>
-               , 
-              <span className='text-white fw-bold'> Staking Pool </span>
+              <p className="mb-5 text text-primary text-gradient w-50 mx-auto">Online platform to invest in <br />
+                <span className='text-white fw-bold'> Stocks </span>
+                ,
+                <span className='text-white fw-bold'> Liquidity Pool </span>
+                ,
+                <span className='text-white fw-bold'> Staking Pool </span>
               </p>
-              
-              <Button onClick={()=>{navigate("/signup")}} variant='contained' className='px-5 py-3 fw-bold' style={{ background: 'linear-gradient(90deg,#9568ff,#9568ff 99.31%)', textTransform: 'capitalize' }} >Sign Up</Button>
+
+              <Button  onClick={() => { navigate("/signup") }} variant='contained' className='px-3 py-3 fw-bold me-2' style={{ background: 'linear-gradient(90deg,#9568ff,#9568ff 99.31%)', textTransform: 'capitalize', zIndex: '9' }} >Company Sign Up</Button>
+              <Button  onClick={() => { navigate("/user-signup") }} variant='contained' className='px-3 py-3 fw-bold' style={{ background: 'linear-gradient(90deg,#9568ff,#9568ff 99.31%)', textTransform: 'capitalize', zIndex: '9' }} >User Sign Up</Button>
               <ul className='image-before'>
                 <li className='left-img'>
                   <img src="https://cryptozone.dexignzone.com/frontend/react/static/media/img1.90c6f431a59671ada976.png"></img>
@@ -128,9 +134,9 @@ export const HomeBanner = () => {
           <div className='col my-3 d-flex justify-content-center'>
             <div className='icon-box shadow-lg'>
               <div className='mb-3 d-flex'>
-              <div className='icon-media me-3'>
-                <img src={flowSVG}/>
-              </div>
+                <div className='icon-media me-3'>
+                  <img src={flowSVG} />
+                </div>
                 <div className='icon-info'>
                   <h5 className='title mb-0 fw-bold' style={{ color: '#1c2e9e' }}>Flow</h5>
                   <span className='text-secondary'>FLOW</span>
@@ -154,9 +160,9 @@ export const HomeBanner = () => {
           <div className='col my-3 d-flex justify-content-center'>
             <div className='icon-box shadow-lg'>
               <div className='mb-3 d-flex'>
-              <div className='icon-media me-3'>
-                <img src={ethereumImg}/>
-              </div>
+                <div className='icon-media me-3'>
+                  <img src={ethereumImg} />
+                </div>
                 <div className='icon-info'>
                   <h5 className='title mb-0 fw-bold' style={{ color: '#1c2e9e' }}>Ethereum</h5>
                   <span className='text-secondary'>ETH</span>
