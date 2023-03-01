@@ -25,9 +25,9 @@
     <br />
     <a href="https://docs.google.com/presentation/d/1uvFwt2GruwrIuoNV-BMZAMZIU03C1OPS25AiXVhrz_o/edit?usp=sharing"><strong>View PPT»</strong></a>
     <br />
-    <a href="https://youtu.be/m3xArqbYJ1A">View Demo</a>
+    <a href="https://youtu.be/3dinZi8Ogho">View Demo</a>
     .
-    <a href="https://decentralizedangellist.web.app">View Site</a>
+    <a href="https://flow-hackathon-4423c.web.app/">View Site</a>
   </p>
 </div>
 
