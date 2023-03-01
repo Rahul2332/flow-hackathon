@@ -58,6 +58,329 @@ export const LiquidityPool = () => {
         setAge(event.target.value);
     };
 
+    const createPair = async () => {
+        try {
+          const transactionId = await fcl.mutate({
+            cadence: `
+            import FiatToken from 0xa983fecbed621163
+            import FUSD from 0xe223d8a629e49c68
+            
+            /// Pair creator needs to pay the deployment fee of 0.001 Flow.
+            import FlowToken from 0x7e60df042a9c0868
+            import SwapFactory from 0xcbed4c301441ded2
+            
+            /// Deploy a trading pair for USDC <-> FUSD if it doesn't exist; otherwise do nothing.
+            transaction() {
+                prepare(deployer: AuthAccount) {
+                    let token0Vault <- FiatToken.createEmptyVault()
+                    let token1Vault <- FUSD.createEmptyVault()
+            
+                    /// 'A.0xADDRESS.TokenName.Vault'
+                    var token0Key = token0Vault.getType().identifier
+                    /// Get token0 identifier
+                    token0Key = token0Key.slice(from: 0, upTo: token0Key.length - 6)
+                    var token1Key = token1Vault.getType().identifier
+                    token1Key = token1Key.slice(from: 0, upTo: token1Key.length - 6)
+                    /// Check whether pair has already existed or not.
+                    let pairAddress = SwapFactory.getPairAddress(token0Key: token0Key, token1Key: token1Key)
+                
+                    if (pairAddress == nil) {
+                        let flowVaultRef = deployer.borrow<&FlowToken.Vault>(from: /storage/flowTokenVault)!
+                        assert(flowVaultRef.balance >= 0.002, message: "Insufficient balance to create pair, minimum balance requirement: 0.002 flow")
+                        let fee <- flowVaultRef.withdraw(amount: 0.001)
+                        SwapFactory.createPair(token0Vault: <-token0Vault, token1Vault: <-token1Vault, accountCreationFee: <-fee)
+                    } else {
+                        /// Pair already exists
+                        destroy token0Vault
+                        destroy token1Vault
+                    }
+                }
+            }
+            `,
+            payer: fcl.authz,
+            proposer: fcl.authz,
+            authorizations: [fcl.authz],
+            limit: 999,
+          });
+    
+          const transaction = await fcl.tx(transactionId).onceSealed();
+          console.log(transaction);
+        } catch (error) {
+          console.error("Transaction error:", error);
+        }
+      };
+    
+    const createEmptyVault = async () => {
+    const transactionId = await fcl.mutate({
+        cadence: `
+        import FungibleToken from 0x9a0766d93b6608b7
+        import FiatToken from 0xa983fecbed621163
+
+        transaction() {
+            prepare(signer: AuthAccount) {
+                let vaultPath = /storage/USDCVault
+                let receiverPath = /public/USDCVaultReceiver
+                let balancePath = /public/USDCVaultBalance
+
+                if signer.borrow<&FungibleToken.Vault>(from: vaultPath) == nil {
+                    signer.save(<- FiatToken.createEmptyVault(), to: vaultPath)
+                    signer.link<&FiatToken.Vault{FungibleToken.Receiver}>(receiverPath, target: vaultPath)
+                    signer.link<&FiatToken.Vault{FungibleToken.Balance}>(balancePath, target: vaultPath)
+                }
+            }
+        }
+        `,
+        payer: fcl.authz,
+        proposer: fcl.authz,
+        authorizations: [fcl.authz],
+        limit: 50
+        })
+        
+        const transaction = await fcl.tx(transactionId).onceSealed()
+        console.log(transaction)
+    }
+
+    const getAllLp = async () => {
+    const address = await fcl.query({
+        cadence: `
+        import SwapFactory from 0xcbed4c301441ded2
+
+        pub fun main(): [Address] {
+            let len = SwapFactory.getAllPairsLength()
+            if (len == 0) {
+            return []
+            } else {
+            return SwapFactory.getSlicedPairs(from: 0, to: UInt64.max)
+            }
+        }
+        `,
+    })
+    console.log(address)
+    if(lpAddress == null)
+    lpAddress = address[address.length - 1];
+    }
+
+    const getPairInfo = async ()=>{
+    if(lpAddress == null)
+        await getAllLp();
+
+    const pairInfo = await fcl.query({
+        cadence: `
+        import SwapInterfaces from 0xddb929038d45d4b3                                     
+        import SwapConfig from 0xddb929038d45d4b3                                         
+                                                                                            
+        pub fun main(pairAddr: Address): [AnyStruct] {                                                                                                                                                            
+            let pairPublicRef = getAccount(pairAddr)                                         
+            .getCapability<&{SwapInterfaces.PairPublic}>(SwapConfig.PairPublicPath)
+            .borrow()                         
+            ?? panic("cannot borrow reference to PairPublic resource")                     
+                                                                                            
+            return pairPublicRef.getPairInfo()                                               
+        }
+        `,
+        args: (arg, t) => [arg(lpAddress, t.Address)]
+    })
+    console.log(pairInfo)
+    return(pairInfo)
+    }
+
+    const addLiquidity = async () => {
+    const pairInfo = await getPairInfo();
+
+    const transactionId = await fcl.mutate({
+        cadence: `
+        import FungibleToken from 0x9a0766d93b6608b7
+        import SwapFactory from 0xcbed4c301441ded2
+        import SwapInterfaces from 0xddb929038d45d4b3
+        import SwapConfig from 0xddb929038d45d4b3
+
+        transaction(
+            token0Key: String,
+            token1Key: String,
+            token0InDesired: UFix64,
+            token1InDesired: UFix64,
+            token0InMin: UFix64,
+            token1InMin: UFix64
+        ) {
+            prepare(lp: AuthAccount) {
+                let pairAddr = SwapFactory.getPairAddress(token0Key: token0Key, token1Key: token1Key)
+                    ?? panic("AddLiquidity: nonexistent pair ".concat(token0Key).concat(" <-> ").concat(token1Key).concat(", create pair first"))
+                let pairPublicRef = getAccount(pairAddr).getCapability<&{SwapInterfaces.PairPublic}>(SwapConfig.PairPublicPath).borrow()!
+                /*
+                    pairInfo = [
+                        SwapPair.token0Key,
+                        SwapPair.token1Key,
+                        SwapPair.token0Vault.balance,
+                        SwapPair.token1Vault.balance,
+                        SwapPair.account.address,
+                        SwapPair.totalSupply
+                    ]
+                */
+                let pairInfo = pairPublicRef.getPairInfo()
+                var token0In = 0.0
+                var token1In = 0.0
+                var token0Reserve = 0.0
+                var token1Reserve = 0.0
+                if token0Key == (pairInfo[0] as! String) {
+                    token0Reserve = (pairInfo[2] as! UFix64)
+                    token1Reserve = (pairInfo[3] as! UFix64)
+                } else {
+                    token0Reserve = (pairInfo[3] as! UFix64)
+                    token1Reserve = (pairInfo[2] as! UFix64)
+                }
+                if token0Reserve == 0.0 && token1Reserve == 0.0 {
+                    token0In = token0InDesired
+                    token1In = token1InDesired
+                } else {
+                    var amount1Optimal = SwapConfig.quote(amountA: token0InDesired, reserveA: token0Reserve, reserveB: token1Reserve)
+                    if (amount1Optimal <= token1InDesired) {
+                        assert(amount1Optimal >= token1InMin, message: "SLIPPAGE_OFFSET_TOO_LARGE expect min".concat(token1InMin.toString()).concat(" got ").concat(amount1Optimal.toString()))
+                        token0In = token0InDesired
+                        token1In = amount1Optimal
+                    } else {
+                        var amount0Optimal = SwapConfig.quote(amountA: token1InDesired, reserveA: token1Reserve, reserveB: token0Reserve)
+                        assert(amount0Optimal <= token0InDesired)
+                        assert(amount0Optimal >= token0InMin, message: "SLIPPAGE_OFFSET_TOO_LARGE expect min".concat(token0InMin.toString()).concat(" got ").concat(amount0Optimal.toString()))
+                        token0In = amount0Optimal
+                        token1In = token1InDesired
+                    }
+                }
+                
+                let token0Vault <- lp.borrow<&FungibleToken.Vault>(from: /storage/USDCVault)!.withdraw(amount: token0In)
+                let token1Vault <- lp.borrow<&FungibleToken.Vault>(from: /storage/fusdVault)!.withdraw(amount: token1In)
+                /// SwapPair.addLiquidity()
+                let lpTokenVault <- pairPublicRef.addLiquidity(
+                    tokenAVault: <- token0Vault,
+                    tokenBVault: <- token1Vault
+                )
+                
+                let lpTokenCollectionStoragePath = SwapConfig.LpTokenCollectionStoragePath
+                let lpTokenCollectionPublicPath = SwapConfig.LpTokenCollectionPublicPath
+                var lpTokenCollectionRef = lp.borrow<&SwapFactory.LpTokenCollection>(from: lpTokenCollectionStoragePath)
+                /// Initialize LpTokenCollection resource for lp if necessary.
+                if lpTokenCollectionRef == nil {
+                    destroy <- lp.load<@AnyResource>(from: lpTokenCollectionStoragePath)
+                    lp.save(<-SwapFactory.createEmptyLpTokenCollection(), to: lpTokenCollectionStoragePath)
+                    lp.link<&{SwapInterfaces.LpTokenCollectionPublic}>(lpTokenCollectionPublicPath, target: lpTokenCollectionStoragePath)
+                    lpTokenCollectionRef = lp.borrow<&SwapFactory.LpTokenCollection>(from: lpTokenCollectionStoragePath)
+                }
+                lpTokenCollectionRef!.deposit(pairAddr: pairAddr, lpTokenVault: <- lpTokenVault)
+            }
+        }`,
+        args: (arg, t) => [
+        arg(pairInfo[0], t.String), 
+        arg(pairInfo[1], t.String), 
+        arg("10.0", t.UFix64), 
+        arg("4.0", t.UFix64), 
+        arg("8.0", t.UFix64), 
+        arg("3.0", t.UFix64)
+        ],
+        payer: fcl.authz,
+        proposer: fcl.authz,
+        authorizations: [fcl.authz],
+        limit: 999
+        })
+        
+        const transaction = await fcl.tx(transactionId).onceSealed()
+        console.log(transaction)
+    }
+
+    const InToOut = async () => {
+    const Out = await fcl.query({
+        cadence: `
+        import SwapRouter from 0x2f8af5ed05bbde0d                           
+        
+        pub fun main(amountIn: UFix64, tokenKeyPath: [String]): [AnyStruct] {
+        return SwapRouter.getAmountsOut(amountIn: amountIn, tokenKeyPath: tokenKeyPath)
+        }
+        `,
+        args: (arg, t) => [
+        arg("2.0", t.UFix64),
+        arg(["A.a983fecbed621163.FiatToken", "A.7e60df042a9c0868.FlowToken", "A.e223d8a629e49c68.FUSD"], t.Array(t.String))
+        ],
+        payer: fcl.authz,
+        proposer: fcl.authz,
+        authorizations: [fcl.authz],
+        limit: 999
+        })
+        
+        return(Out)
+    }
+
+    const OutToIn = async () => {
+    const In = await fcl.query({
+        cadence: `
+        import SwapRouter from 0x2f8af5ed05bbde0d                           
+        
+        pub fun main(amountOut: UFix64, tokenKeyPath: [String]): [AnyStruct] {
+        return SwapRouter.getAmountsIn(amountOut: amountOut, tokenKeyPath: tokenKeyPath)
+        }
+        `,
+        args: (arg, t) => [
+        arg("2.0", t.UFix64),
+        arg(["A.a983fecbed621163.FiatToken", "A.7e60df042a9c0868.FlowToken", "A.e223d8a629e49c68.FUSD"], t.Array(t.String))
+        ],
+        payer: fcl.authz,
+        proposer: fcl.authz,
+        authorizations: [fcl.authz],
+        limit: 999
+        })
+        
+        return(In)
+    }
+
+    const swapUsdcFusd = async () => {
+    const transactionId = await fcl.mutate({
+        cadence: `
+        import FungibleToken from 0x9a0766d93b6608b7
+        import SwapRouter from 0x2f8af5ed05bbde0d
+
+        transaction(
+            exactAmountIn: UFix64,
+            amountOutMin: UFix64,
+            path: [String],
+            to: Address,
+            deadline: UFix64
+        ) {
+            prepare(userAccount: AuthAccount) {
+                let tokenInVaultPath = /storage/flowTokenVault
+                let tokenOutReceiverPath = /public/USDCVaultReceiver
+
+                let inVaultRef = userAccount.borrow<&FungibleToken.Vault>(from: tokenInVaultPath)
+                    ?? panic("Could not borrow reference to the owner's in FT.Vault")
+                /// Note: Receiver (to) should already have out FT.Vault initialized, otherwise tx reverts.
+                let outReceiverRef = getAccount(to).getCapability(tokenOutReceiverPath)
+                    .borrow<&{FungibleToken.Receiver}>()
+                    ?? panic("Could not borrow receiver reference to the recipient's out FT.Vault")
+
+                let exactVaultIn <- inVaultRef.withdraw(amount: exactAmountIn)
+                let vaultOut <- SwapRouter.swapExactTokensForTokens(
+                    exactVaultIn: <-exactVaultIn,
+                    amountOutMin: amountOutMin,
+                    tokenKeyPath: path,
+                    deadline: deadline
+                )
+                outReceiverRef.deposit(from: <-vaultOut)
+            }
+        }
+        `,
+        args: (arg, t) => [
+        arg("1.0", t.UFix64),
+        arg("2.0", t.UFix64),
+        arg(["A.a983fecbed621163.FiatToken", "A.7e60df042a9c0868.FlowToken", "A.e223d8a629e49c68.FUSD"], t.Array(t.String)),
+        arg("0x3e0b67751ae9a885", t.Address),
+        arg(Date.now().toString(), t.UFix64)
+        ],
+        payer: fcl.authz,
+        proposer: fcl.authz,
+        authorizations: [fcl.authz],
+        limit: 999
+        })
+        
+        const transaction = await fcl.tx(transactionId).onceSealed()
+        console.log(transaction)
+    }
+
     return (
         <>
             <div className='m-0 p-0' style={{ backgroundColor: 'rgb(244,239,255)', minHeight: '100vh' }}>
